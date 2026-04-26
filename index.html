@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
   <meta name="theme-color" content="#1a0505"/>
-  <meta name="description" content="Virtual Diya for Maa Durga – light your diyas digitally wherever you are."/>
-  <title>🪔 Jai Maa Durga — Virtual Diya</title>
+  <meta name="description" content="దుర్గా మాత వర్చువల్ దీపం — PG లో ఉండి పూజ చేయండి."/>
+  <title>🪔 జయ మాతా దుర్గా — Virtual Diya</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Noto+Sans+Telugu:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet"/>
 
   <style>
   /* ── RESET ── */
@@ -92,7 +92,7 @@
     margin-bottom:5px;
   }
   .subtitle{
-    font-family:'Noto Sans Devanagari',sans-serif;
+    font-family:'Noto Sans Telugu','Noto Sans Devanagari',sans-serif;
     font-size:clamp(.9rem,3.8vw,1.15rem);
     color:var(--saffron);opacity:.85;letter-spacing:1px;
   }
@@ -107,7 +107,7 @@
   .blessing{
     position:relative;z-index:2;
     text-align:center;
-    font-family:'Noto Sans Devanagari',sans-serif;
+    font-family:'Noto Sans Telugu','Noto Sans Devanagari',sans-serif;
     color:var(--gold);
     font-size:clamp(.85rem,3.5vw,1.05rem);
     padding:10px 20px;
@@ -117,6 +117,31 @@
     text-shadow:0 0 15px rgba(255,215,0,.6);
   }
   .blessing.show{opacity:1;max-height:80px}
+
+  /* ── DURGA ART ── */
+  .durga-art{
+    position:relative;z-index:2;
+    display:flex;flex-direction:column;align-items:center;
+    padding:10px 20px 0;
+    animation:fadeDown .9s .15s ease both;
+  }
+  .durga-svg{
+    width:min(240px,70vw);
+    height:auto;
+    filter:drop-shadow(0 0 18px rgba(255,180,0,.35)) drop-shadow(0 8px 16px rgba(0,0,0,.6));
+  }
+  .halo-ring{animation:haloSpin 8s linear infinite}
+  @keyframes haloSpin{
+    from{opacity:.55}
+    50% {opacity:.9}
+    to  {opacity:.55}
+  }
+  .durga-caption{
+    font-family:'Noto Sans Telugu','Noto Sans Devanagari',sans-serif;
+    color:var(--saffron);font-size:.88rem;
+    letter-spacing:1px;margin-top:6px;
+    text-shadow:0 0 12px rgba(255,140,0,.5);
+  }
 
   /* ── AGARBATTI (incense) row ── */
   .agarbatti-row{
@@ -353,13 +378,13 @@
     color:rgba(255,165,0,.5);text-transform:uppercase;margin-bottom:10px;
   }
   .mantra-text{
-    font-family:'Noto Sans Devanagari',sans-serif;
+    font-family:'Noto Sans Telugu','Noto Sans Devanagari',sans-serif;
     color:rgba(255,165,0,.7);
     font-size:clamp(.82rem,3.4vw,1rem);
     line-height:2.1;
   }
   .mantra-small{
-    font-family:'Noto Sans Devanagari',sans-serif;
+    font-family:'Noto Sans Telugu','Noto Sans Devanagari',sans-serif;
     color:rgba(255,140,0,.5);font-size:.78rem;
     margin-top:10px;letter-spacing:1px;
   }
@@ -462,13 +487,192 @@
   </div>
 
   <h1 class="title">Jai Maa Durga</h1>
-  <p class="subtitle">जय माँ दुर्गा — Navratri Aarti 🙏</p>
+  <p class="subtitle">జయ మాతా దుర్గా — నవరాత్రి ఆరతి 🙏</p>
   <div class="bar"></div>
   <div class="decos">🪷 🔱 🪷</div>
 </header>
 
+<!-- ── DURGA DEVI ILLUSTRATION ── -->
+<div class="durga-art" aria-label="Goddess Durga illustration">
+  <svg viewBox="0 0 260 320" xmlns="http://www.w3.org/2000/svg" class="durga-svg">
+    <defs>
+      <radialGradient id="haloG" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#FFD700" stop-opacity=".55"/>
+        <stop offset="60%" stop-color="#FF8C00" stop-opacity=".18"/>
+        <stop offset="100%" stop-color="#FF4500" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="skinG" cx="50%" cy="30%" r="70%">
+        <stop offset="0%"  stop-color="#F5C67A"/>
+        <stop offset="100%" stop-color="#D4960A"/>
+      </radialGradient>
+      <linearGradient id="sariG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"  stop-color="#C1000A"/>
+        <stop offset="50%" stop-color="#8B0000"/>
+        <stop offset="100%" stop-color="#4a0008"/>
+      </linearGradient>
+      <linearGradient id="goldG" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%"  stop-color="#FFE57A"/>
+        <stop offset="100%" stop-color="#FF8C00"/>
+      </linearGradient>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="softglow">
+        <feGaussianBlur stdDeviation="5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- Divine halo / prabhamandala -->
+    <circle cx="130" cy="100" r="72" fill="url(#haloG)" class="halo-ring"/>
+    <circle cx="130" cy="100" r="68" fill="none" stroke="rgba(255,215,0,.35)" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <circle cx="130" cy="100" r="60" fill="none" stroke="rgba(255,215,0,.2)"  stroke-width="1"/>
+
+    <!-- Crown petals (mukut) -->
+    <g fill="url(#goldG)" filter="url(#glow)">
+      <ellipse cx="130" cy="34" rx="7"  ry="14" transform="rotate(0,130,34)"/>
+      <ellipse cx="130" cy="34" rx="6"  ry="13" transform="rotate(18,130,100)"/>
+      <ellipse cx="130" cy="34" rx="6"  ry="13" transform="rotate(-18,130,100)"/>
+      <ellipse cx="130" cy="34" rx="5"  ry="11" transform="rotate(36,130,100)"/>
+      <ellipse cx="130" cy="34" rx="5"  ry="11" transform="rotate(-36,130,100)"/>
+    </g>
+    <!-- Crown base -->
+    <rect x="107" y="55" width="46" height="14" rx="4" fill="url(#goldG)"/>
+    <rect x="110" y="52" width="40" height="8"  rx="3" fill="#FFD700"/>
+    <!-- Crown gems -->
+    <circle cx="130" cy="55" r="4" fill="#DC143C" filter="url(#glow)"/>
+    <circle cx="118" cy="57" r="3" fill="#1E90FF"/>
+    <circle cx="142" cy="57" r="3" fill="#32CD32"/>
+
+    <!-- Face -->
+    <ellipse cx="130" cy="98" rx="28" ry="32" fill="url(#skinG)"/>
+    <!-- Third eye -->
+    <ellipse cx="130" cy="82" rx="5" ry="3" fill="#CC0000" filter="url(#glow)"/>
+    <ellipse cx="130" cy="82" rx="2.5" ry="1.5" fill="#FFD700"/>
+    <!-- Eyes -->
+    <ellipse cx="118" cy="92" rx="7" ry="5" fill="#1a0800"/>
+    <ellipse cx="142" cy="92" rx="7" ry="5" fill="#1a0800"/>
+    <ellipse cx="118" cy="91" rx="4" ry="3.5" fill="#2a1400"/>
+    <ellipse cx="142" cy="91" rx="4" ry="3.5" fill="#2a1400"/>
+    <!-- Eye whites & pupils -->
+    <ellipse cx="116" cy="92" rx="2"   ry="1.8" fill="white" opacity=".9"/>
+    <ellipse cx="140" cy="92" rx="2"   ry="1.8" fill="white" opacity=".9"/>
+    <circle  cx="118" cy="92" r="1.5"  fill="#1a0800"/>
+    <circle  cx="142" cy="92" r="1.5"  fill="#1a0800"/>
+    <!-- Eye highlights -->
+    <circle cx="117.5" cy="91" r=".6" fill="white"/>
+    <circle cx="141.5" cy="91" r=".6" fill="white"/>
+    <!-- Eyebrows -->
+    <path d="M111 87 Q118 84 125 87" stroke="#3d2000" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M135 87 Q142 84 149 87" stroke="#3d2000" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <!-- Nose -->
+    <ellipse cx="130" cy="102" rx="4" ry="3" fill="#E8A850"/>
+    <circle  cx="128" cy="103" r="1.2" fill="#C98030"/>
+    <circle  cx="132" cy="103" r="1.2" fill="#C98030"/>
+    <!-- Lips -->
+    <path d="M122 110 Q130 115 138 110" stroke="#C00030" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M123 110 Q130 113 137 110" fill="#DC143C" opacity=".7"/>
+    <!-- Earrings -->
+    <circle cx="102" cy="99"  r="5"   fill="url(#goldG)" filter="url(#glow)"/>
+    <circle cx="158" cy="99"  r="5"   fill="url(#goldG)" filter="url(#glow)"/>
+    <ellipse cx="102" cy="106" rx="3" ry="5" fill="#FF8C00" opacity=".8"/>
+    <ellipse cx="158" cy="106" rx="3" ry="5" fill="#FF8C00" opacity=".8"/>
+    <!-- Bindi -->
+    <circle cx="130" cy="75" r="3.5" fill="#DC143C" filter="url(#glow)"/>
+
+    <!-- Neck -->
+    <rect x="118" y="128" width="24" height="18" rx="8" fill="url(#skinG)"/>
+    <!-- Necklace -->
+    <path d="M110 135 Q130 145 150 135" stroke="url(#goldG)" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="130" cy="144" r="4" fill="#DC143C" filter="url(#glow)"/>
+    <circle cx="118" cy="139" r="2.5" fill="url(#goldG)"/>
+    <circle cx="142" cy="139" r="2.5" fill="url(#goldG)"/>
+
+    <!-- Body / sari torso -->
+    <path d="M80 148 Q90 155 130 158 Q170 155 180 148 L185 230 Q170 245 130 248 Q90 245 75 230 Z" fill="url(#sariG)"/>
+    <!-- Sari gold border -->
+    <path d="M80 148 Q90 155 130 158 Q170 155 180 148" stroke="url(#goldG)" stroke-width="3" fill="none"/>
+    <path d="M75 230 Q90 245 130 248 Q170 245 185 230" stroke="url(#goldG)" stroke-width="3" fill="none"/>
+    <!-- Sari decoration -->
+    <path d="M90 170 Q130 175 170 170" stroke="rgba(255,215,0,.4)" stroke-width="1" fill="none" stroke-dasharray="4 3"/>
+    <path d="M88 185 Q130 190 172 185" stroke="rgba(255,215,0,.3)" stroke-width="1" fill="none" stroke-dasharray="4 3"/>
+
+    <!-- LEFT arms (8 arms — Durga) -->
+    <!-- Upper left -->
+    <line x1="90" y1="155" x2="42" y2="120" stroke="url(#skinG)" stroke-width="10" stroke-linecap="round"/>
+    <line x1="90" y1="155" x2="42" y2="120" stroke="#E8A850"     stroke-width="7"  stroke-linecap="round"/>
+    <!-- Mid left -->
+    <line x1="85" y1="168" x2="30" y2="165" stroke="url(#skinG)" stroke-width="10" stroke-linecap="round"/>
+    <line x1="85" y1="168" x2="30" y2="165" stroke="#E8A850"     stroke-width="7"  stroke-linecap="round"/>
+    <!-- Lower left -->
+    <line x1="82" y1="185" x2="35" y2="210" stroke="url(#skinG)" stroke-width="10" stroke-linecap="round"/>
+    <line x1="82" y1="185" x2="35" y2="210" stroke="#E8A850"     stroke-width="7"  stroke-linecap="round"/>
+    <!-- Lower-lower left -->
+    <line x1="80" y1="200" x2="50" y2="235" stroke="url(#skinG)" stroke-width="9"  stroke-linecap="round"/>
+    <line x1="80" y1="200" x2="50" y2="235" stroke="#E8A850"     stroke-width="6"  stroke-linecap="round"/>
+
+    <!-- RIGHT arms -->
+    <line x1="170" y1="155" x2="218" y2="120" stroke="url(#skinG)" stroke-width="10" stroke-linecap="round"/>
+    <line x1="170" y1="155" x2="218" y2="120" stroke="#E8A850"     stroke-width="7"  stroke-linecap="round"/>
+    <line x1="175" y1="168" x2="230" y2="165" stroke="url(#skinG)" stroke-width="10" stroke-linecap="round"/>
+    <line x1="175" y1="168" x2="230" y2="165" stroke="#E8A850"     stroke-width="7"  stroke-linecap="round"/>
+    <line x1="178" y1="185" x2="225" y2="210" stroke="url(#skinG)" stroke-width="10" stroke-linecap="round"/>
+    <line x1="178" y1="185" x2="225" y2="210" stroke="#E8A850"     stroke-width="7"  stroke-linecap="round"/>
+    <line x1="180" y1="200" x2="210" y2="235" stroke="url(#skinG)" stroke-width="9"  stroke-linecap="round"/>
+    <line x1="180" y1="200" x2="210" y2="235" stroke="#E8A850"     stroke-width="6"  stroke-linecap="round"/>
+
+    <!-- Weapons / attributes in hands -->
+    <!-- Upper right: Trishul -->
+    <g transform="translate(218,120) rotate(-30)" filter="url(#glow)">
+      <line x1="0" y1="0" x2="0" y2="-30" stroke="#FFD700" stroke-width="2"/>
+      <path d="M0,-30 C-5,-36 -5,-44 0,-40 C5,-44 5,-36 0,-30" fill="none" stroke="#FFD700" stroke-width="1.8"/>
+      <line x1="-6" y1="-26" x2="6" y2="-26" stroke="#FFD700" stroke-width="1.5"/>
+    </g>
+    <!-- Upper right 2: Chakra (disc) -->
+    <circle cx="230" cy="165" r="9" fill="none" stroke="#FFD700" stroke-width="2" filter="url(#glow)"/>
+    <circle cx="230" cy="165" r="4" fill="rgba(255,215,0,.4)"/>
+    <!-- Lower right: Sword -->
+    <g transform="translate(225,210) rotate(35)">
+      <rect x="-2" y="-20" width="4" height="30" rx="1" fill="url(#goldG)"/>
+      <rect x="-5" y="8"   width="10" height="4"  rx="1" fill="#CC9000"/>
+    </g>
+    <!-- Lower-lower right: Lotus -->
+    <g transform="translate(212,235)">
+      <ellipse cx="0" cy="0" rx="5" ry="8" fill="#FF69B4" transform="rotate(0)"/>
+      <ellipse cx="0" cy="0" rx="5" ry="8" fill="#FF69B4" transform="rotate(72)"/>
+      <ellipse cx="0" cy="0" rx="5" ry="8" fill="#FFB6C1" transform="rotate(144)"/>
+      <ellipse cx="0" cy="0" rx="5" ry="8" fill="#FFB6C1" transform="rotate(216)"/>
+      <ellipse cx="0" cy="0" rx="5" ry="8" fill="#FF69B4" transform="rotate(288)"/>
+      <circle  cx="0" cy="0" r="4" fill="#FFD700"/>
+    </g>
+
+    <!-- Left hands: Conch + Abhaya mudra -->
+    <!-- Conch -->
+    <ellipse cx="42" cy="120" rx="8" ry="10" fill="ivory" stroke="#CC9000" stroke-width="1.5"/>
+    <!-- Abhaya (open palm) -->
+    <ellipse cx="30" cy="165" rx="7" ry="9"  fill="#E8A850" stroke="#C98030" stroke-width="1"/>
+    <!-- Mace -->
+    <g transform="translate(35,210) rotate(-20)">
+      <rect x="-2" y="-22" width="4" height="28" rx="1" fill="#8B6914"/>
+      <circle cx="0" cy="-22" r="6" fill="#CC9000"/>
+    </g>
+    <!-- Shield -->
+    <path d="M50 235 L44 255 Q50 262 56 255 Z" fill="#8B0000" stroke="url(#goldG)" stroke-width="1.5"/>
+
+    <!-- Skirt / lower sari -->
+    <path d="M75 230 Q90 255 130 260 Q170 255 185 230 L188 290 Q160 310 130 312 Q100 310 72 290 Z" fill="url(#sariG)" opacity=".9"/>
+    <path d="M72 290 Q100 310 130 312 Q160 310 188 290" stroke="url(#goldG)" stroke-width="2.5" fill="none"/>
+
+    <!-- Name below -->
+    <text x="130" y="308" text-anchor="middle" font-family="'Noto Sans Telugu',sans-serif"
+          font-size="13" fill="url(#goldG)" filter="url(#glow)">శ్రీ దుర్గా మాత</text>
+  </svg>
+  <div class="durga-caption">శ్రీ దుర్గా మాత కి జయ్ 🙏</div>
+</div>
+
 <!-- Blessing banner -->
-<div class="blessing" id="blessing">✦ &nbsp; माँ दुर्गा की कृपा आप पर सदा बनी रहे &nbsp; ✦</div>
+<div class="blessing" id="blessing">✦ &nbsp; దుర్గా మాత ఆశీర్వాదాలు మీపై సదా ఉండాలి &nbsp; ✦</div>
 
 <!-- Agarbatti / Incense row -->
 <div class="agarbatti-row" aria-hidden="true">
@@ -529,9 +733,9 @@
         <ellipse cx="36" cy="38" rx="10" ry="5" fill="rgba(255,140,80,.08)" transform="rotate(-20,36,38)"/>
       </svg>
     </div>
-    <div class="lbl">Diya One</div>
-    <div class="st" id="st1">Unlit</div>
-    <button class="btn" id="btn1" onclick="toggle(1);event.stopPropagation()">Light Up</button>
+    <div class="lbl">దీపం ఒకటి</div>
+    <div class="st" id="st1">వెలగలేదు</div>
+    <button class="btn" id="btn1" onclick="toggle(1);event.stopPropagation()">వెలిగించు</button>
   </div>
 
   <!-- Diya 2 -->
@@ -566,36 +770,36 @@
         <ellipse cx="36" cy="38" rx="10" ry="5" fill="rgba(255,140,80,.08)" transform="rotate(-20,36,38)"/>
       </svg>
     </div>
-    <div class="lbl">Diya Two</div>
-    <div class="st" id="st2">Unlit</div>
-    <button class="btn" id="btn2" onclick="toggle(2);event.stopPropagation()">Light Up</button>
+    <div class="lbl">దీపం రెండు</div>
+    <div class="st" id="st2">వెలగలేదు</div>
+    <button class="btn" id="btn2" onclick="toggle(2);event.stopPropagation()">వెలిగించు</button>
   </div>
 
 </section>
 
 <!-- ── ACTION BUTTONS ── -->
 <div class="action-row">
-  <button class="big-btn btn-light" id="btnBoth"  onclick="lightBoth()">🪔 Light Both Diyas</button>
-  <button class="big-btn btn-ext"   id="btnExt"   onclick="extAll()">✦ Extinguish All</button>
-  <button class="big-btn btn-bell"  id="btnBell"  onclick="ringBell()">🔔 Ring Bell</button>
+  <button class="big-btn btn-light" id="btnBoth"  onclick="lightBoth()">🪔 రెండూ వెలిగించు</button>
+  <button class="big-btn btn-ext"   id="btnExt"   onclick="extAll()">✦ ఆర్పివేయి</button>
+  <button class="big-btn btn-bell"  id="btnBell"  onclick="ringBell()">🔔 గంట మోగించు</button>
 </div>
 
 <!-- ── MANTRA ── -->
 <div class="mantra-wrap">
   <div class="bar"></div>
-  <div class="mantra-heading">Durga Shloka</div>
+  <div class="mantra-heading">దుర్గా శ్లోకం</div>
   <p class="mantra-text">
-    या देवी सर्वभूतेषु शक्तिरूपेण संस्थिता।<br/>
-    नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥
+    యా దేవీ సర్వభూతేషు శక్తిరూపేణ సంస్థితా।<br/>
+    నమస్తస్యై నమస్తస్యై నమస్తస్యై నమో నమః॥
   </p>
-  <p class="mantra-small">ॐ दुं दुर्गायै नमः</p>
+  <p class="mantra-small">ఓం దుం దుర్గాయై నమః 🙏</p>
   <div class="bar"></div>
 </div>
 
 <!-- ── FOOTER ── -->
 <footer>
   <div class="flowers">🌸 🌸 🌸</div>
-  <p>Jai Maa Durga &nbsp;•&nbsp; Har Har Mahadev &nbsp;•&nbsp; शुभ नवरात्रि</p>
+  <p>జయ మాతా దుర్గా &nbsp;•&nbsp; హర్ హర్ మహాదేవ్ &nbsp;•&nbsp; శుభ నవరాత్రి</p>
 </footer>
 
 <!-- ─────────────────────── SCRIPT ─────────────────────── -->
@@ -621,8 +825,8 @@ function apply(n) {
   const btn  = document.getElementById('btn' + n);
   const on   = lit[n - 1];
   card.classList.toggle('lit', on);
-  st.textContent  = on ? '✦ Burning' : 'Unlit';
-  btn.textContent = on ? 'Extinguish' : 'Light Up';
+  st.textContent  = on ? '✦ వెలుగుతోంది' : 'వెలగలేదు';
+  btn.textContent = on ? 'ఆర్పివేయి' : 'వెలిగించు';
 }
 
 function lightBoth() {
