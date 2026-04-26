@@ -1,682 +1,774 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#1a0505" />
-  <title>Jai Maa Durga — Virtual Diya</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <meta name="theme-color" content="#1a0505"/>
+  <meta name="description" content="Virtual Diya for Maa Durga – light your diyas digitally wherever you are."/>
+  <title>🪔 Jai Maa Durga — Virtual Diya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet"/>
+
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  /* ── RESET ── */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
 
-    :root {
-      --gold:    #FFD700;
-      --saffron: #FF8C00;
-      --flame1:  #FF4500;
-      --flame2:  #FFD700;
-      --clay1:   #C1440E;
-      --clay2:   #7A2C08;
-      --bg-deep: #0d0000;
-    }
+  /* ── ROOT PALETTE ── */
+  :root{
+    --gold:#FFD700;
+    --saffron:#FF8C00;
+    --crimson:#B22222;
+    --clay-hi:#D4500F;
+    --clay-lo:#6E2807;
+    --bg1:#2d0a0a;
+    --bg2:#0d0000;
+    --card-unlit:rgba(255,255,255,.025);
+    --card-lit:rgba(255,110,0,.07);
+    --glow-lit:rgba(255,120,0,.28);
+  }
 
-    html, body {
-      min-height: 100%;
-      width: 100%;
-      overflow-x: hidden;
-    }
+  /* ── BODY / BACKGROUND ── */
+  html,body{min-height:100%;width:100%;overflow-x:hidden}
+  body{
+    background:radial-gradient(ellipse 140% 100% at 50% 10%,var(--bg1) 0%,#1a0505 55%,var(--bg2) 100%);
+    display:flex;flex-direction:column;align-items:center;
+    font-family:'Cinzel Decorative',serif;
+    color:var(--gold);
+    transition:background 1.4s ease;
+    position:relative;
+  }
+  body.both-lit{
+    background:radial-gradient(ellipse 140% 100% at 50% 10%,#5a1212 0%,#2e0808 55%,#180303 100%);
+  }
 
-    body {
-      background: radial-gradient(ellipse at 50% 30%, #2d0a0a 0%, #1a0505 55%, var(--bg-deep) 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-family: 'Cinzel Decorative', serif;
-      color: var(--gold);
-      transition: background 1.2s ease;
-      position: relative;
-    }
+  /* ── STARFIELD ── */
+  #bg{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-    body.both-lit {
-      background: radial-gradient(ellipse at 50% 30%, #4a1010 0%, #2e0808 55%, #1a0303 100%);
-    }
+  /* ── HEADER ── */
+  .header{
+    position:relative;z-index:2;
+    text-align:center;
+    padding:36px 20px 8px;
+    width:100%;
+    animation:fadeDown .9s ease both;
+  }
 
-    /* ── CANVAS STARS ── */
-    #bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
+  /* Mandala ring */
+  .mandala{
+    width:110px;height:110px;
+    margin:0 auto 6px;
+    position:relative;
+    animation:spin-slow 24s linear infinite;
+  }
+  .mandala svg{width:100%;height:100%}
+  @keyframes spin-slow{to{transform:rotate(360deg)}}
 
-    /* ── HEADER ── */
-    .header {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 36px 20px 12px;
-      width: 100%;
-    }
+  /* Om in center of mandala */
+  .om-wrap{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    animation:spin-slow 24s linear infinite reverse;
+  }
+  .om{
+    font-size:2.6rem;
+    background:linear-gradient(135deg,#FFE57A,var(--gold),var(--saffron));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    filter:drop-shadow(0 0 10px rgba(255,215,0,.7));
+    animation:halo 2.5s ease-in-out infinite alternate;
+  }
+  @keyframes halo{
+    from{filter:drop-shadow(0 0 10px rgba(255,215,0,.6))}
+    to  {filter:drop-shadow(0 0 26px rgba(255,215,0,1)) drop-shadow(0 0 50px rgba(255,140,0,.6))}
+  }
 
-    .om {
-      font-size: clamp(2.4rem, 8vw, 3.6rem);
-      color: var(--gold);
-      text-shadow: 0 0 18px var(--gold), 0 0 40px var(--saffron);
-      animation: halo 2.4s ease-in-out infinite alternate;
-      line-height: 1;
-      display: block;
-    }
+  .title{
+    font-size:clamp(1.5rem,5.5vw,2.8rem);
+    letter-spacing:3px;
+    background:linear-gradient(135deg,#FFE57A 0%,var(--gold) 50%,var(--saffron) 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    text-shadow:none;
+    filter:drop-shadow(0 2px 8px rgba(255,180,0,.3));
+    margin-bottom:5px;
+  }
+  .subtitle{
+    font-family:'Noto Sans Devanagari',sans-serif;
+    font-size:clamp(.9rem,3.8vw,1.15rem);
+    color:var(--saffron);opacity:.85;letter-spacing:1px;
+  }
+  .bar{
+    width:min(280px,75vw);height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    margin:14px auto;opacity:.5;
+  }
+  .decos{font-size:1.3rem;letter-spacing:10px;opacity:.5}
 
-    @keyframes halo {
-      from { text-shadow: 0 0 18px var(--gold), 0 0 40px var(--saffron); }
-      to   { text-shadow: 0 0 30px var(--gold), 0 0 70px var(--saffron), 0 0 100px #FF4500; }
-    }
+  /* ── BLESSING BANNER (shows when both lit) ── */
+  .blessing{
+    position:relative;z-index:2;
+    text-align:center;
+    font-family:'Noto Sans Devanagari',sans-serif;
+    color:var(--gold);
+    font-size:clamp(.85rem,3.5vw,1.05rem);
+    padding:10px 20px;
+    opacity:0;max-height:0;overflow:hidden;
+    transition:opacity .8s,max-height .8s;
+    letter-spacing:1px;
+    text-shadow:0 0 15px rgba(255,215,0,.6);
+  }
+  .blessing.show{opacity:1;max-height:80px}
 
-    .title {
-      font-size: clamp(1.4rem, 5.5vw, 2.6rem);
-      letter-spacing: 3px;
-      margin: 10px 0 4px;
-      background: linear-gradient(135deg, #FFE57A, var(--gold), #FF8C00);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+  /* ── AGARBATTI (incense) row ── */
+  .agarbatti-row{
+    position:relative;z-index:2;
+    display:flex;gap:clamp(60px,15vw,120px);justify-content:center;
+    padding:6px 20px 0;
+    pointer-events:none;
+  }
+  .stick-wrap{display:flex;flex-direction:column;align-items:center;gap:0}
+  .stick-smoke{
+    width:4px;height:30px;
+    position:relative;
+    overflow:visible;
+  }
+  .s-dot{
+    position:absolute;bottom:0;left:50%;
+    transform:translateX(-50%);
+    width:4px;height:4px;border-radius:50%;
+    background:rgba(220,200,180,.5);
+    opacity:0;
+    animation:sRise 3s ease-out infinite;
+  }
+  .s-dot:nth-child(2){animation-delay:1s}
+  .s-dot:nth-child(3){animation-delay:2s}
+  @keyframes sRise{
+    0%  {opacity:0;transform:translateX(-50%) translateY(0) scaleX(1)}
+    15% {opacity:.55}
+    100%{opacity:0;transform:translateX(-50%) translateY(-34px) scaleX(3.5)}
+  }
+  .stick-body{
+    width:3px;height:50px;
+    background:linear-gradient(#8B6914,#4a2c00 60%,#ff6a00);
+    border-radius:2px 2px 0 0;
+  }
+  .stick-base{
+    width:20px;height:6px;
+    background:linear-gradient(#6b3a00,#3d2000);
+    border-radius:3px;
+  }
+  .stick-label{
+    font-size:.55rem;letter-spacing:1px;
+    color:rgba(255,165,0,.45);margin-top:4px;
+    font-family:'Cinzel Decorative',serif;
+  }
 
-    .subtitle {
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      font-size: clamp(0.9rem, 3.5vw, 1.15rem);
-      color: var(--saffron);
-      opacity: 0.85;
-      letter-spacing: 1px;
-    }
+  /* ── DIYAS ROW ── */
+  .diyas-row{
+    position:relative;z-index:2;
+    display:flex;gap:clamp(20px,6vw,52px);
+    justify-content:center;align-items:flex-end;
+    padding:14px 20px 0;flex-wrap:wrap;
+  }
 
-    .bar {
-      width: min(260px, 70vw);
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 14px auto;
-      opacity: 0.6;
-    }
+  /* ── CARD ── */
+  .card{
+    display:flex;flex-direction:column;align-items:center;gap:11px;
+    padding:22px 18px 16px;
+    border-radius:24px;
+    border:1px solid rgba(255,215,0,.18);
+    background:var(--card-unlit);
+    backdrop-filter:blur(8px);
+    cursor:pointer;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+    transition:border-color .5s,background .5s,box-shadow .5s;
+    min-width:148px;
+    position:relative;overflow:hidden;
+    animation:fadeUp .8s ease both;
+  }
+  #d1{animation-delay:.1s}
+  #d2{animation-delay:.25s}
+  .card.lit{
+    border-color:rgba(255,165,0,.55);
+    background:var(--card-lit);
+    box-shadow:0 0 40px var(--glow-lit),0 0 80px rgba(255,80,0,.12);
+  }
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(24px)}
+    to  {opacity:1;transform:translateY(0)}
+  }
+  @keyframes fadeDown{
+    from{opacity:0;transform:translateY(-20px)}
+    to  {opacity:1;transform:translateY(0)}
+  }
 
-    .decos {
-      font-size: 1.4rem;
-      letter-spacing: 8px;
-      opacity: 0.55;
-    }
+  /* ── DIYA SCENE ── */
+  .diya-scene{position:relative;width:130px;height:155px;display:flex;align-items:flex-end;justify-content:center}
 
-    /* ── DIYAS SECTION ── */
-    .diyas-row {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      gap: clamp(24px, 6vw, 56px);
-      justify-content: center;
-      align-items: flex-end;
-      padding: 10px 20px 4px;
-      flex-wrap: wrap;
-    }
+  /* Smoke */
+  .smoke{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);pointer-events:none}
+  .sm{
+    position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+    width:5px;height:5px;border-radius:50%;
+    background:rgba(220,200,180,.45);opacity:0;
+  }
+  .card.lit .sm:nth-child(1){animation:smRise 2.5s ease-out 0s   infinite}
+  .card.lit .sm:nth-child(2){animation:smRise 2.5s ease-out .85s infinite}
+  .card.lit .sm:nth-child(3){animation:smRise 2.5s ease-out 1.7s infinite}
+  @keyframes smRise{
+    0%  {opacity:0;transform:translateX(-50%) translateY(0) scale(1)}
+    12% {opacity:.5}
+    100%{opacity:0;transform:translateX(-50%) translateY(-40px) scale(4)}
+  }
 
-    /* ── DIYA CARD ── */
-    .card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      padding: 22px 18px 18px;
-      border-radius: 22px;
-      border: 1px solid rgba(255, 215, 0, 0.18);
-      background: rgba(255,255,255,0.025);
-      backdrop-filter: blur(6px);
-      cursor: pointer;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      transition: border-color .5s, background .5s, box-shadow .5s;
-      min-width: 150px;
-    }
+  /* Flame wrapper */
+  .fw{position:absolute;bottom:88px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center}
+  .flame{position:relative;width:34px;height:62px;opacity:0;transition:opacity .65s ease}
+  .card.lit .flame{opacity:1}
 
-    .card.lit {
-      border-color: rgba(255, 165, 0, 0.55);
-      background: rgba(255, 120, 0, 0.07);
-      box-shadow: 0 0 40px rgba(255, 120, 0, 0.25), 0 0 80px rgba(255, 80, 0, 0.1);
-    }
+  .fo{
+    position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+    width:30px;height:54px;
+    background:linear-gradient(to top,#CC1100 0%,#FF5500 35%,#FFAA00 70%,#FFD700 100%);
+    border-radius:52% 48% 28% 28%/72% 72% 28% 28%;
+    filter:blur(2px);
+  }
+  .fm{
+    position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+    width:20px;height:40px;
+    background:linear-gradient(to top,#FF6600 0%,#FFCC00 60%,#FFFF99 100%);
+    border-radius:52% 48% 28% 28%/72% 72% 28% 28%;
+    filter:blur(.5px);
+  }
+  .fc{
+    position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+    width:9px;height:22px;
+    background:linear-gradient(to top,#fff,#FFFACC);
+    border-radius:52% 48% 28% 28%/72% 72% 28% 28%;
+  }
 
-    /* ── DIYA VISUAL ── */
-    .diya-scene {
-      position: relative;
-      width: 130px;
-      height: 160px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-    }
+  .card.lit .fo{animation:flkO 1.7s ease-in-out infinite alternate}
+  .card.lit .fm{animation:flkM 1.3s ease-in-out infinite alternate}
+  .card.lit .fc{animation:flkC 0.9s ease-in-out infinite alternate}
 
-    /* Smoke */
-    .smoke {
-      position: absolute;
-      bottom: 106px;
-      left: 50%;
-      transform: translateX(-50%);
-      pointer-events: none;
-    }
-    .smoke-dot {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: rgba(220,200,180,0.45);
-      opacity: 0;
-    }
-    .card.lit .smoke-dot:nth-child(1) { animation: smokeUp 2.4s ease-out 0s    infinite; }
-    .card.lit .smoke-dot:nth-child(2) { animation: smokeUp 2.4s ease-out 0.8s  infinite; }
-    .card.lit .smoke-dot:nth-child(3) { animation: smokeUp 2.4s ease-out 1.6s  infinite; }
-    @keyframes smokeUp {
-      0%   { opacity: 0;   transform: translateX(-50%) translateY(0)    scale(1);   }
-      15%  { opacity: 0.5; }
-      100% { opacity: 0;   transform: translateX(-50%) translateY(-38px) scale(3.5); }
-    }
+  @keyframes flkO{
+    0%  {transform:translateX(-50%) scaleX(1)    scaleY(1)    rotate(-2.5deg)}
+    33% {transform:translateX(-50%) scaleX(.87)  scaleY(1.08) rotate(1.5deg)}
+    66% {transform:translateX(-50%) scaleX(1.13) scaleY(.92)  rotate(-1deg)}
+    100%{transform:translateX(-50%) scaleX(.95)  scaleY(1.06) rotate(2.5deg)}
+  }
+  @keyframes flkM{
+    0%  {transform:translateX(-50%) scaleX(1)    scaleY(1)    rotate(0deg)}
+    50% {transform:translateX(-50%) scaleX(.8)   scaleY(1.14) rotate(2.5deg)}
+    100%{transform:translateX(-50%) scaleX(1.2)  scaleY(.88)  rotate(-2deg)}
+  }
+  @keyframes flkC{
+    0%  {transform:translateX(-50%) scaleY(1)    scaleX(1);   opacity:1}
+    50% {transform:translateX(-50%) scaleY(.85)  scaleX(1.25);opacity:.8}
+    100%{transform:translateX(-50%) scaleY(1.15) scaleX(.75); opacity:1}
+  }
 
-    /* Flame wrapper */
-    .flame-wrap {
-      position: absolute;
-      bottom: 96px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+  /* Glow pool under flame */
+  .fglow{
+    position:absolute;bottom:82px;left:50%;transform:translateX(-50%);
+    width:72px;height:18px;border-radius:50%;
+    background:radial-gradient(ellipse,rgba(255,150,0,.75),transparent 70%);
+    opacity:0;pointer-events:none;transition:opacity .6s;
+  }
+  .card.lit .fglow{opacity:1;animation:glwP 1.6s ease-in-out infinite alternate}
+  @keyframes glwP{
+    from{transform:translateX(-50%) scale(1);opacity:.7}
+    to  {transform:translateX(-50%) scale(1.4);opacity:1}
+  }
 
-    .flame {
-      position: relative;
-      width: 34px;
-      height: 60px;
-      opacity: 0;
-      transition: opacity 0.6s ease;
-    }
-    .card.lit .flame { opacity: 1; }
+  /* Diya SVG — using CSS drop-shadow, no inline filter */
+  .diya-svg{
+    width:122px;height:auto;
+    filter:drop-shadow(0 5px 9px rgba(0,0,0,.65));
+    transition:filter .55s;
+  }
+  .card.lit .diya-svg{
+    filter:drop-shadow(0 0 14px rgba(255,140,0,.5)) drop-shadow(0 5px 9px rgba(0,0,0,.65));
+  }
 
-    .f-outer {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 30px;
-      height: 52px;
-      background: linear-gradient(to top, #FF2200, #FF6600, #FFB800, #FFD700);
-      border-radius: 52% 48% 28% 28% / 72% 72% 28% 28%;
-      filter: blur(1.5px);
-    }
-    .f-mid {
-      position: absolute;
-      bottom: 2px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 20px;
-      height: 40px;
-      background: linear-gradient(to top, #FF6600, #FFCC00, #FFFF88);
-      border-radius: 52% 48% 28% 28% / 72% 72% 28% 28%;
-      filter: blur(0.5px);
-    }
-    .f-core {
-      position: absolute;
-      bottom: 4px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 9px;
-      height: 22px;
-      background: linear-gradient(to top, #fff, #FFFACC);
-      border-radius: 52% 48% 28% 28% / 72% 72% 28% 28%;
-    }
+  /* ── LABELS ── */
+  .lbl{font-size:.78rem;letter-spacing:2px;color:var(--saffron);text-transform:uppercase}
+  .st{font-size:.62rem;letter-spacing:3px;color:rgba(255,165,0,.4);text-transform:uppercase;transition:color .5s}
+  .card.lit .st{color:var(--gold)}
 
-    /* Flame animations */
-    .card.lit .f-outer { animation: flk-o 1.6s ease-in-out infinite alternate; }
-    .card.lit .f-mid   { animation: flk-m 1.2s ease-in-out infinite alternate; }
-    .card.lit .f-core  { animation: flk-c 0.9s ease-in-out infinite alternate; }
+  /* ── BUTTONS ── */
+  .btn{
+    padding:9px 22px;
+    border:1.5px solid var(--gold);background:transparent;
+    color:var(--gold);font-family:'Cinzel Decorative',serif;
+    font-size:.67rem;letter-spacing:1px;border-radius:25px;
+    cursor:pointer;transition:background .3s,border-color .3s,color .3s,transform .15s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .btn:active{transform:scale(.94)}
+  .btn:hover {background:rgba(255,215,0,.12)}
+  .card.lit .btn{border-color:var(--saffron);color:var(--saffron);background:rgba(255,140,0,.1)}
 
-    @keyframes flk-o {
-      0%   { transform: translateX(-50%) scaleX(1)    scaleY(1)    rotate(-2deg); }
-      33%  { transform: translateX(-50%) scaleX(0.88) scaleY(1.07) rotate(1.5deg); }
-      66%  { transform: translateX(-50%) scaleX(1.12) scaleY(0.93) rotate(-1deg); }
-      100% { transform: translateX(-50%) scaleX(0.95) scaleY(1.05) rotate(2deg); }
-    }
-    @keyframes flk-m {
-      0%   { transform: translateX(-50%) scaleX(1)    scaleY(1)    rotate(0deg); }
-      50%  { transform: translateX(-50%) scaleX(0.82) scaleY(1.12) rotate(2deg); }
-      100% { transform: translateX(-50%) scaleX(1.18) scaleY(0.9)  rotate(-1.5deg); }
-    }
-    @keyframes flk-c {
-      0%   { transform: translateX(-50%) scaleY(1)   scaleX(1);   opacity: 1; }
-      50%  { transform: translateX(-50%) scaleY(0.88) scaleX(1.2); opacity: 0.82; }
-      100% { transform: translateX(-50%) scaleY(1.12) scaleX(0.8); opacity: 1; }
-    }
+  /* ── ACTION ROW ── */
+  .action-row{
+    position:relative;z-index:2;
+    display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+    padding:20px 20px 0;
+  }
+  .big-btn{
+    padding:13px 28px;
+    font-family:'Cinzel Decorative',serif;font-size:.72rem;letter-spacing:1px;
+    border-radius:30px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .2s,box-shadow .3s;
+  }
+  .big-btn:active{transform:scale(.94)}
+  .btn-light{
+    background:linear-gradient(135deg,#8B0000,#B22222);
+    color:var(--gold);border:1.5px solid var(--gold);
+    box-shadow:0 0 18px rgba(160,20,20,.45);
+  }
+  .btn-light:hover{box-shadow:0 0 32px rgba(220,30,30,.6)}
+  .btn-ext{
+    background:linear-gradient(135deg,#1a0a00,#2e1200);
+    color:rgba(255,165,0,.75);border:1.5px solid rgba(255,165,0,.45);
+    display:none;
+  }
+  .btn-bell{
+    background:linear-gradient(135deg,#3a2600,#5c3d00);
+    color:var(--gold);border:1.5px solid rgba(255,215,0,.5);
+    box-shadow:0 0 12px rgba(120,80,0,.3);
+  }
+  .btn-bell:hover{box-shadow:0 0 22px rgba(200,150,0,.5)}
 
-    /* Glow under flame */
-    .f-glow {
-      position: absolute;
-      bottom: 89px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 70px;
-      height: 18px;
-      border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(255,150,0,0.7), transparent 70%);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.6s;
-    }
-    .card.lit .f-glow {
-      opacity: 1;
-      animation: glow-p 1.5s ease-in-out infinite alternate;
-    }
-    @keyframes glow-p {
-      from { transform: translateX(-50%) scale(1);   opacity: 0.7; }
-      to   { transform: translateX(-50%) scale(1.35); opacity: 1; }
-    }
+  /* ── MANTRA ── */
+  .mantra-wrap{
+    position:relative;z-index:2;
+    text-align:center;padding:16px 24px 0;
+    max-width:420px;width:100%;
+    animation:fadeUp .9s .4s ease both;
+  }
+  .mantra-heading{
+    font-size:.7rem;letter-spacing:4px;
+    color:rgba(255,165,0,.5);text-transform:uppercase;margin-bottom:10px;
+  }
+  .mantra-text{
+    font-family:'Noto Sans Devanagari',sans-serif;
+    color:rgba(255,165,0,.7);
+    font-size:clamp(.82rem,3.4vw,1rem);
+    line-height:2.1;
+  }
+  .mantra-small{
+    font-family:'Noto Sans Devanagari',sans-serif;
+    color:rgba(255,140,0,.5);font-size:.78rem;
+    margin-top:10px;letter-spacing:1px;
+  }
 
-    /* Diya SVG */
-    .diya-svg {
-      width: 120px;
-      height: auto;
-      filter: drop-shadow(0 5px 8px rgba(0,0,0,0.6));
-      transition: filter .5s;
-    }
-    .card.lit .diya-svg {
-      filter: drop-shadow(0 0 12px rgba(255,140,0,0.45)) drop-shadow(0 5px 8px rgba(0,0,0,0.6));
-    }
+  /* ── FOOTER ── */
+  footer{
+    position:relative;z-index:2;
+    text-align:center;padding:24px 16px 36px;
+    color:rgba(255,165,0,.32);font-size:.58rem;letter-spacing:2px;
+  }
+  footer .flowers{font-size:1rem;letter-spacing:8px;opacity:.4;margin-bottom:8px}
 
-    /* ── LABELS & CONTROLS ── */
-    .lbl {
-      font-size: 0.8rem;
-      letter-spacing: 2px;
-      color: var(--saffron);
-      text-transform: uppercase;
-    }
+  /* ── RIPPLE ── */
+  .rip{
+    position:absolute;border-radius:50%;
+    background:rgba(255,215,0,.25);
+    pointer-events:none;
+    animation:ripAnim .55s linear;
+  }
+  @keyframes ripAnim{to{transform:scale(5);opacity:0}}
 
-    .status {
-      font-size: 0.65rem;
-      letter-spacing: 3px;
-      color: rgba(255,165,0,0.45);
-      text-transform: uppercase;
-      transition: color .5s;
-    }
-    .card.lit .status { color: var(--gold); }
-
-    .btn {
-      padding: 9px 22px;
-      border: 1.5px solid var(--gold);
-      background: transparent;
-      color: var(--gold);
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 0.68rem;
-      letter-spacing: 1px;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: background .3s, border-color .3s, color .3s, transform .15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn:active { transform: scale(0.95); }
-    .btn:hover  { background: rgba(255,215,0,0.12); }
-
-    .card.lit .btn {
-      border-color: var(--saffron);
-      color: var(--saffron);
-      background: rgba(255,140,0,0.1);
-    }
-
-    /* ── BOTH BUTTON ── */
-    .both-row {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-      padding: 8px 20px 0;
-      flex-wrap: wrap;
-    }
-
-    .btn-both {
-      padding: 13px 34px;
-      background: linear-gradient(135deg, #8B0000, #B22222);
-      color: var(--gold);
-      border: 1.5px solid var(--gold);
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 0.75rem;
-      letter-spacing: 1px;
-      border-radius: 30px;
-      cursor: pointer;
-      box-shadow: 0 0 18px rgba(180,30,30,0.4);
-      transition: transform .2s, box-shadow .3s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn-both:active { transform: scale(0.95); }
-    .btn-both:hover  { box-shadow: 0 0 30px rgba(220,30,30,0.55); }
-
-    /* ── MANTRA ── */
-    .mantra-box {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 14px 24px 0;
-      max-width: 380px;
-      width: 100%;
-    }
-    .mantra-text {
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      color: rgba(255,165,0,0.65);
-      font-size: clamp(0.78rem, 3.2vw, 0.95rem);
-      line-height: 2;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 20px 16px 32px;
-      color: rgba(255,165,0,0.35);
-      font-size: 0.6rem;
-      letter-spacing: 2px;
-    }
-
-    /* ── TAP RIPPLE ── */
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,215,0,0.3);
-      transform: scale(0);
-      animation: ripple-anim 0.55s linear;
-      pointer-events: none;
-    }
-    @keyframes ripple-anim {
-      to { transform: scale(4); opacity: 0; }
-    }
-
-    /* ── PETAL PARTICLES ── */
-    .petal {
-      position: fixed;
-      font-size: 1rem;
-      pointer-events: none;
-      animation: petal-fall linear infinite;
-      z-index: 1;
-      opacity: 0;
-    }
-    @keyframes petal-fall {
-      0%   { transform: translateY(-5vh) rotate(0deg);   opacity: 0; }
-      10%  { opacity: 0.6; }
-      90%  { opacity: 0.4; }
-      100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
-    }
+  /* ── PETALS ── */
+  .petal{
+    position:fixed;pointer-events:none;
+    animation:petalFall linear infinite;
+    z-index:1;opacity:0;
+  }
+  @keyframes petalFall{
+    0%  {transform:translateY(-5vh) rotate(0deg);opacity:0}
+    8%  {opacity:.65}
+    92% {opacity:.45}
+    100%{transform:translateY(106vh) rotate(380deg);opacity:0}
+  }
   </style>
 </head>
+
 <body>
 
-<!-- Starfield -->
+<!-- Starfield canvas -->
 <canvas id="bg"></canvas>
 
-<!-- Header -->
+<!-- ── HEADER ── -->
 <header class="header">
-  <span class="om">ॐ</span>
+
+  <!-- Mandala ring with Om -->
+  <div class="mandala" aria-hidden="true">
+    <svg viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="mg" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"  stop-color="#FFD700" stop-opacity=".8"/>
+          <stop offset="100%" stop-color="#FF8C00" stop-opacity=".1"/>
+        </radialGradient>
+      </defs>
+      <!-- 8 petals -->
+      <g transform="translate(55,55)">
+        <g opacity=".55">
+          <!-- Outer petal loop -->
+          <ellipse cx="0" cy="-44" rx="6" ry="12" fill="url(#mg)" transform="rotate(0)"/>
+          <ellipse cx="0" cy="-44" rx="6" ry="12" fill="url(#mg)" transform="rotate(45)"/>
+          <ellipse cx="0" cy="-44" rx="6" ry="12" fill="url(#mg)" transform="rotate(90)"/>
+          <ellipse cx="0" cy="-44" rx="6" ry="12" fill="url(#mg)" transform="rotate(135)"/>
+          <ellipse cx="0" cy="-44" rx="6" ry="12" fill="url(#mg)" transform="rotate(180)"/>
+          <ellipse cx="0" cy="-44" rx="6" ry="12" fill="url(#mg)" transform="rotate(225)"/>
+          <ellipse cx="0" cy="-44" rx="6" ry="12" fill="url(#mg)" transform="rotate(270)"/>
+          <ellipse cx="0" cy="-44" rx="6" ry="12" fill="url(#mg)" transform="rotate(315)"/>
+        </g>
+        <!-- Rings -->
+        <circle r="32" fill="none" stroke="rgba(255,215,0,.3)" stroke-width="1"/>
+        <circle r="24" fill="none" stroke="rgba(255,165,0,.2)" stroke-width=".8"/>
+        <!-- 16 tiny petals inner -->
+        <g opacity=".3">
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(0)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(22.5)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(45)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(67.5)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(90)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(112.5)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(135)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(157.5)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(180)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(202.5)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(225)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(247.5)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(270)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(292.5)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(315)"/>
+          <ellipse cx="0" cy="-22" rx="3" ry="6" fill="#FFD700" transform="rotate(337.5)"/>
+        </g>
+        <!-- Trishul -->
+        <g stroke="rgba(255,215,0,.7)" stroke-width="1.5" fill="none">
+          <line x1="0" y1="10" x2="0" y2="-12"/>
+          <line x1="-6" y1="2" x2="6" y2="2"/>
+          <path d="M0,-12 C-4,-16 -4,-20 0,-18 C4,-20 4,-16 0,-12"/>
+          <path d="M-6,2 C-9,-2 -8,-8 -6,2"/>
+          <path d="M6,2 C9,-2 8,-8 6,2"/>
+        </g>
+      </g>
+    </svg>
+    <div class="om-wrap" aria-hidden="true"><span class="om">ॐ</span></div>
+  </div>
+
   <h1 class="title">Jai Maa Durga</h1>
-  <p class="subtitle">जय माँ दुर्गा — नवरात्रि आरती</p>
+  <p class="subtitle">जय माँ दुर्गा — Navratri Aarti 🙏</p>
   <div class="bar"></div>
   <div class="decos">🪷 🔱 🪷</div>
 </header>
 
-<!-- Diyas -->
-<section class="diyas-row" id="diyasRow">
+<!-- Blessing banner -->
+<div class="blessing" id="blessing">✦ &nbsp; माँ दुर्गा की कृपा आप पर सदा बनी रहे &nbsp; ✦</div>
+
+<!-- Agarbatti / Incense row -->
+<div class="agarbatti-row" aria-hidden="true">
+  <div class="stick-wrap">
+    <div class="stick-smoke"><div class="s-dot"></div><div class="s-dot"></div><div class="s-dot"></div></div>
+    <div class="stick-body"></div>
+    <div class="stick-base"></div>
+    <div class="stick-label">अगरबत्ती</div>
+  </div>
+  <div class="stick-wrap">
+    <div class="stick-smoke"><div class="s-dot"></div><div class="s-dot"></div><div class="s-dot"></div></div>
+    <div class="stick-body"></div>
+    <div class="stick-base"></div>
+    <div class="stick-label">अगरबत्ती</div>
+  </div>
+</div>
+
+<!-- ── DIYAS ── -->
+<section class="diyas-row">
 
   <!-- Diya 1 -->
-  <div class="card" id="d1" role="button" aria-label="Diya 1 toggle" tabindex="0">
+  <div class="card" id="d1" role="button" aria-label="Diya One — tap to light or extinguish" tabindex="0">
     <div class="diya-scene">
-      <div class="smoke">
-        <div class="smoke-dot"></div>
-        <div class="smoke-dot"></div>
-        <div class="smoke-dot"></div>
-      </div>
-      <div class="flame-wrap">
+      <div class="smoke"><div class="sm"></div><div class="sm"></div><div class="sm"></div></div>
+      <div class="fw">
         <div class="flame">
-          <div class="f-outer"></div>
-          <div class="f-mid"></div>
-          <div class="f-core"></div>
+          <div class="fo"></div><div class="fm"></div><div class="fc"></div>
         </div>
       </div>
-      <div class="f-glow"></div>
+      <div class="fglow"></div>
       <svg class="diya-svg" viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stop-color="#D4500F"/>
-            <stop offset="55%"  stop-color="#A03A0A"/>
+            <stop offset="0%"  stop-color="#D4500F"/>
+            <stop offset="55%" stop-color="#A03A0A"/>
             <stop offset="100%" stop-color="#6E2807"/>
           </linearGradient>
-          <radialGradient id="oil1" cx="40%" cy="50%" r="55%">
-            <stop offset="0%"   stop-color="#2a0e00"/>
+          <radialGradient id="oil1" cx="42%" cy="50%" r="55%">
+            <stop offset="0%"  stop-color="#2a0e00"/>
             <stop offset="100%" stop-color="#0d0400"/>
           </radialGradient>
-          <filter id="dshadow">
-            <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#00000088"/>
-          </filter>
         </defs>
         <!-- body -->
-        <path d="M18 44 Q22 62 60 66 Q98 62 102 44 Q93 30 60 27 Q27 30 18 44Z"
-              fill="url(#cg1)" filter="url(#dshadow)"/>
+        <path d="M18 44 Q22 62 60 66 Q98 62 102 44 Q93 30 60 27 Q27 30 18 44Z" fill="url(#cg1)"/>
         <!-- spout -->
-        <path d="M94 40 Q110 36 112 30 Q107 27 98 33 Q96 36 94 40Z"
-              fill="url(#cg1)"/>
-        <!-- oil pool -->
-        <ellipse cx="58" cy="44" rx="36" ry="10" fill="url(#oil1)" opacity="0.88"/>
-        <!-- rim highlight -->
-        <ellipse cx="58" cy="43" rx="36" ry="7" fill="none" stroke="rgba(255,140,60,0.35)" stroke-width="1.2"/>
-        <!-- inner oil sheen -->
-        <ellipse cx="46" cy="41" rx="11" ry="4" fill="rgba(255,120,0,0.12)"/>
+        <path d="M94 40 Q110 36 112 30 Q107 27 98 33 Q96 36 94 40Z" fill="url(#cg1)"/>
+        <!-- oil -->
+        <ellipse cx="58" cy="44" rx="36" ry="10" fill="url(#oil1)" opacity=".9"/>
+        <!-- rim -->
+        <ellipse cx="58" cy="43" rx="36" ry="7" fill="none" stroke="rgba(255,140,60,.35)" stroke-width="1.2"/>
+        <!-- sheen -->
+        <ellipse cx="46" cy="41" rx="11" ry="4" fill="rgba(255,120,0,.12)"/>
         <!-- wick base -->
         <ellipse cx="100" cy="28" rx="3.5" ry="2" fill="#5c3400"/>
         <!-- wick -->
-        <rect x="99" y="16" width="3" height="13" rx="1.5" fill="#3d2200"/>
+        <rect x="99" y="15" width="3" height="14" rx="1.5" fill="#3d2200"/>
+        <!-- highlight on body -->
+        <ellipse cx="36" cy="38" rx="10" ry="5" fill="rgba(255,140,80,.08)" transform="rotate(-20,36,38)"/>
       </svg>
     </div>
     <div class="lbl">Diya One</div>
-    <div class="status" id="st1">Unlit</div>
-    <button class="btn" id="btn1" onclick="toggle(1); event.stopPropagation()">Light Up</button>
+    <div class="st" id="st1">Unlit</div>
+    <button class="btn" id="btn1" onclick="toggle(1);event.stopPropagation()">Light Up</button>
   </div>
 
   <!-- Diya 2 -->
-  <div class="card" id="d2" role="button" aria-label="Diya 2 toggle" tabindex="0">
+  <div class="card" id="d2" role="button" aria-label="Diya Two — tap to light or extinguish" tabindex="0">
     <div class="diya-scene">
-      <div class="smoke">
-        <div class="smoke-dot"></div>
-        <div class="smoke-dot"></div>
-        <div class="smoke-dot"></div>
-      </div>
-      <div class="flame-wrap">
+      <div class="smoke"><div class="sm"></div><div class="sm"></div><div class="sm"></div></div>
+      <div class="fw">
         <div class="flame">
-          <div class="f-outer"></div>
-          <div class="f-mid"></div>
-          <div class="f-core"></div>
+          <div class="fo"></div><div class="fm"></div><div class="fc"></div>
         </div>
       </div>
-      <div class="f-glow"></div>
+      <div class="fglow"></div>
       <svg class="diya-svg" viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stop-color="#D4500F"/>
-            <stop offset="55%"  stop-color="#A03A0A"/>
+            <stop offset="0%"  stop-color="#D4500F"/>
+            <stop offset="55%" stop-color="#A03A0A"/>
             <stop offset="100%" stop-color="#6E2807"/>
           </linearGradient>
-          <radialGradient id="oil2" cx="40%" cy="50%" r="55%">
-            <stop offset="0%"   stop-color="#2a0e00"/>
+          <radialGradient id="oil2" cx="42%" cy="50%" r="55%">
+            <stop offset="0%"  stop-color="#2a0e00"/>
             <stop offset="100%" stop-color="#0d0400"/>
           </radialGradient>
         </defs>
-        <path d="M18 44 Q22 62 60 66 Q98 62 102 44 Q93 30 60 27 Q27 30 18 44Z"
-              fill="url(#cg2)" filter="url(#dshadow)"/>
-        <path d="M94 40 Q110 36 112 30 Q107 27 98 33 Q96 36 94 40Z"
-              fill="url(#cg2)"/>
-        <ellipse cx="58" cy="44" rx="36" ry="10" fill="url(#oil2)" opacity="0.88"/>
-        <ellipse cx="58" cy="43" rx="36" ry="7" fill="none" stroke="rgba(255,140,60,0.35)" stroke-width="1.2"/>
-        <ellipse cx="46" cy="41" rx="11" ry="4" fill="rgba(255,120,0,0.12)"/>
+        <path d="M18 44 Q22 62 60 66 Q98 62 102 44 Q93 30 60 27 Q27 30 18 44Z" fill="url(#cg2)"/>
+        <path d="M94 40 Q110 36 112 30 Q107 27 98 33 Q96 36 94 40Z" fill="url(#cg2)"/>
+        <ellipse cx="58" cy="44" rx="36" ry="10" fill="url(#oil2)" opacity=".9"/>
+        <ellipse cx="58" cy="43" rx="36" ry="7" fill="none" stroke="rgba(255,140,60,.35)" stroke-width="1.2"/>
+        <ellipse cx="46" cy="41" rx="11" ry="4" fill="rgba(255,120,0,.12)"/>
         <ellipse cx="100" cy="28" rx="3.5" ry="2" fill="#5c3400"/>
-        <rect x="99" y="16" width="3" height="13" rx="1.5" fill="#3d2200"/>
+        <rect x="99" y="15" width="3" height="14" rx="1.5" fill="#3d2200"/>
+        <ellipse cx="36" cy="38" rx="10" ry="5" fill="rgba(255,140,80,.08)" transform="rotate(-20,36,38)"/>
       </svg>
     </div>
     <div class="lbl">Diya Two</div>
-    <div class="status" id="st2">Unlit</div>
-    <button class="btn" id="btn2" onclick="toggle(2); event.stopPropagation()">Light Up</button>
+    <div class="st" id="st2">Unlit</div>
+    <button class="btn" id="btn2" onclick="toggle(2);event.stopPropagation()">Light Up</button>
   </div>
 
 </section>
 
-<!-- Both / All-off buttons -->
-<div class="both-row" style="margin-top:22px">
-  <button class="btn-both" id="btnBoth" onclick="lightBoth()">🪔 Light Both Diyas</button>
-  <button class="btn-both" id="btnOff" style="background:linear-gradient(135deg,#1a0a00,#2e1200);display:none" onclick="extAll()">✦ Extinguish All</button>
+<!-- ── ACTION BUTTONS ── -->
+<div class="action-row">
+  <button class="big-btn btn-light" id="btnBoth"  onclick="lightBoth()">🪔 Light Both Diyas</button>
+  <button class="big-btn btn-ext"   id="btnExt"   onclick="extAll()">✦ Extinguish All</button>
+  <button class="big-btn btn-bell"  id="btnBell"  onclick="ringBell()">🔔 Ring Bell</button>
 </div>
 
-<!-- Mantra -->
-<div class="mantra-box">
-  <div class="bar" style="margin: 18px auto 14px"></div>
+<!-- ── MANTRA ── -->
+<div class="mantra-wrap">
+  <div class="bar"></div>
+  <div class="mantra-heading">Durga Shloka</div>
   <p class="mantra-text">
     या देवी सर्वभूतेषु शक्तिरूपेण संस्थिता।<br/>
     नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥
   </p>
-  <div class="bar" style="margin: 14px auto 0"></div>
+  <p class="mantra-small">ॐ दुं दुर्गायै नमः</p>
+  <div class="bar"></div>
 </div>
 
-<!-- Footer -->
+<!-- ── FOOTER ── -->
 <footer>
-  <div style="letter-spacing:10px;font-size:1rem;opacity:.4">🌸 🌸 🌸</div>
-  <p style="margin-top:8px">Jai Maa Durga &nbsp;•&nbsp; Har Har Mahadev</p>
+  <div class="flowers">🌸 🌸 🌸</div>
+  <p>Jai Maa Durga &nbsp;•&nbsp; Har Har Mahadev &nbsp;•&nbsp; शुभ नवरात्रि</p>
 </footer>
 
+<!-- ─────────────────────── SCRIPT ─────────────────────── -->
 <script>
-  /* ─── State ─── */
-  const state = [false, false];
+'use strict';
 
-  /* ─── Toggle ─── */
-  function toggle(n) {
-    state[n - 1] = !state[n - 1];
-    applyState(n);
-    updateBothBtn();
-    if (state[n - 1]) igniteSound();
-    if (navigator.vibrate) navigator.vibrate(state[n - 1] ? 55 : 30);
-  }
+/* ── State ── */
+const lit = [false, false];
+let actx = null;
 
-  function applyState(n) {
-    const card  = document.getElementById('d' + n);
-    const st    = document.getElementById('st' + n);
-    const btn   = document.getElementById('btn' + n);
-    const on    = state[n - 1];
-    card.classList.toggle('lit', on);
-    st.textContent  = on ? 'Burning ✦' : 'Unlit';
-    btn.textContent = on ? 'Extinguish' : 'Light Up';
-  }
+/* ── Toggle ── */
+function toggle(n) {
+  lit[n - 1] = !lit[n - 1];
+  apply(n);
+  sync();
+  if (lit[n - 1]) ignite();
+  vibe(lit[n - 1] ? 55 : 30);
+}
 
-  function lightBoth() {
-    [1, 2].forEach(n => { state[n - 1] = true; applyState(n); });
-    igniteSound();
-    updateBothBtn();
-    if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
-  }
+function apply(n) {
+  const card = document.getElementById('d' + n);
+  const st   = document.getElementById('st' + n);
+  const btn  = document.getElementById('btn' + n);
+  const on   = lit[n - 1];
+  card.classList.toggle('lit', on);
+  st.textContent  = on ? '✦ Burning' : 'Unlit';
+  btn.textContent = on ? 'Extinguish' : 'Light Up';
+}
 
-  function extAll() {
-    [1, 2].forEach(n => { state[n - 1] = false; applyState(n); });
-    updateBothBtn();
-    if (navigator.vibrate) navigator.vibrate(30);
-  }
+function lightBoth() {
+  lit[0] = lit[1] = true;
+  apply(1); apply(2); sync();
+  ignite(); vibe([40, 30, 40]);
+}
 
-  function updateBothBtn() {
-    const allLit = state[0] && state[1];
-    const noneLit = !state[0] && !state[1];
-    document.getElementById('btnBoth').style.display = allLit  ? 'none'  : 'inline-block';
-    document.getElementById('btnOff').style.display  = noneLit ? 'none'  : 'inline-block';
-    document.body.classList.toggle('both-lit', allLit);
-  }
+function extAll() {
+  lit[0] = lit[1] = false;
+  apply(1); apply(2); sync();
+  vibe(30);
+}
 
-  /* ─── Card click (whole card acts as button) ─── */
-  document.getElementById('d1').addEventListener('click', e => { rippleAt(e, document.getElementById('d1')); toggle(1); });
-  document.getElementById('d2').addEventListener('click', e => { rippleAt(e, document.getElementById('d2')); toggle(2); });
-  document.getElementById('d1').addEventListener('keydown', e => e.key === 'Enter' && toggle(1));
-  document.getElementById('d2').addEventListener('keydown', e => e.key === 'Enter' && toggle(2));
+function sync() {
+  const all  = lit[0] && lit[1];
+  const none = !lit[0] && !lit[1];
+  document.getElementById('btnBoth').style.display = all  ? 'none'         : 'inline-block';
+  document.getElementById('btnExt').style.display  = none ? 'none'         : 'inline-block';
+  document.body.classList.toggle('both-lit', all);
+  document.getElementById('blessing').classList.toggle('show', all);
+  document.title = all
+    ? '🪔🪔 Jai Maa Durga — Both Diyas Lit!'
+    : lit[0] || lit[1]
+      ? '🪔 Jai Maa Durga — Diya Burning'
+      : '🪔 Jai Maa Durga — Virtual Diya';
+}
 
-  /* ─── Ripple ─── */
-  function rippleAt(e, el) {
-    const rect = el.getBoundingClientRect();
-    const r = document.createElement('span');
-    r.className = 'ripple';
-    r.style.cssText = `width:60px;height:60px;left:${(e.clientX||rect.left+rect.width/2)-rect.left-30}px;top:${(e.clientY||rect.top+rect.height/2)-rect.top-30}px`;
-    el.style.position = 'relative';
-    el.style.overflow = 'hidden';
-    el.appendChild(r);
-    r.addEventListener('animationend', () => r.remove());
-  }
+/* ── Card tap & keyboard ── */
+function addCardHandlers(n) {
+  const card = document.getElementById('d' + n);
+  card.addEventListener('click',  e => { ripple(e, card); toggle(n); });
+  card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(n); } });
+}
+addCardHandlers(1);
+addCardHandlers(2);
 
-  /* ─── Ignite sound (Web Audio) ─── */
-  let actx;
-  function igniteSound() {
-    try {
-      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
-      const sr  = actx.sampleRate;
-      const len = sr * 0.25;
-      const buf = actx.createBuffer(1, len, sr);
-      const d   = buf.getChannelData(0);
-      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (sr * 0.04));
-      const src = actx.createBufferSource();
-      src.buffer = buf;
-      const gain = actx.createGain();
-      gain.gain.setValueAtTime(0.25, actx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.25);
-      const filt = actx.createBiquadFilter();
-      filt.type = 'bandpass'; filt.frequency.value = 900; filt.Q.value = 0.6;
-      src.connect(filt); filt.connect(gain); gain.connect(actx.destination);
-      src.start();
-    } catch (_) {}
-  }
+/* ── Ripple ── */
+function ripple(e, el) {
+  const rect = el.getBoundingClientRect();
+  const r = document.createElement('span');
+  r.className = 'rip';
+  const cx = (e.clientX ?? rect.left + rect.width  / 2) - rect.left;
+  const cy = (e.clientY ?? rect.top  + rect.height / 2) - rect.top;
+  r.style.cssText = `width:60px;height:60px;left:${cx - 30}px;top:${cy - 30}px`;
+  el.appendChild(r);
+  r.addEventListener('animationend', () => r.remove());
+}
 
-  /* ─── Starfield canvas ─── */
-  const cv  = document.getElementById('bg');
-  const ctx = cv.getContext('2d');
+/* ── Web Audio helpers ── */
+function getCtx() {
+  actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+  if (actx.state === 'suspended') actx.resume();
+  return actx;
+}
 
-  function resize() { cv.width = innerWidth; cv.height = innerHeight; }
-  resize();
-  window.addEventListener('resize', resize);
+function ignite() {
+  try {
+    const ctx = getCtx();
+    const sr  = ctx.sampleRate;
+    const len = ~~(sr * 0.28);
+    const buf = ctx.createBuffer(1, len, sr);
+    const d   = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (sr * 0.04));
+    const src  = ctx.createBufferSource();
+    src.buffer = buf;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.28, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.28);
+    const filt = ctx.createBiquadFilter();
+    filt.type = 'bandpass'; filt.frequency.value = 900; filt.Q.value = 0.55;
+    src.connect(filt); filt.connect(gain); gain.connect(ctx.destination);
+    src.start();
+  } catch(_) {}
+}
 
-  const stars = Array.from({ length: 90 }, () => ({
-    x: Math.random() * innerWidth,
-    y: Math.random() * innerHeight,
-    r: Math.random() * 1.4 + 0.4,
-    a: Math.random(),
-    spd: Math.random() * 0.018 + 0.004
-  }));
-
-  (function tick() {
-    ctx.clearRect(0, 0, cv.width, cv.height);
-    stars.forEach(s => {
-      s.a += s.spd;
-      if (s.a > 1 || s.a < 0) s.spd = -s.spd;
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,220,100,${Math.abs(s.a).toFixed(2)})`;
-      ctx.fill();
+function ringBell() {
+  try {
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    const freqs = [880, 1320, 1760, 2200];
+    freqs.forEach((f, i) => {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = f;
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.18 / (i + 1), now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 2.8 - i * 0.3);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(now); osc.stop(now + 3);
     });
-    requestAnimationFrame(tick);
-  })();
+    vibe([30, 20, 30]);
+  } catch(_) {}
+}
 
-  /* ─── Floating petals ─── */
-  const petals = ['🌸', '🌺', '🪷', '✨'];
-  function spawnPetal() {
-    const p = document.createElement('div');
-    p.className = 'petal';
-    p.textContent = petals[Math.floor(Math.random() * petals.length)];
-    p.style.left     = Math.random() * 100 + 'vw';
-    p.style.fontSize = (0.7 + Math.random() * 0.6) + 'rem';
-    p.style.animationDuration  = (9 + Math.random() * 8) + 's';
-    p.style.animationDelay     = (Math.random() * 6) + 's';
-    document.body.appendChild(p);
-    p.addEventListener('animationend', () => p.remove());
+function vibe(p) { try { navigator.vibrate && navigator.vibrate(p); } catch(_) {} }
+
+/* ── Starfield ── */
+const cv  = document.getElementById('bg');
+const ctx2 = cv.getContext('2d');
+let W, H;
+
+function resizeBg() {
+  W = cv.width  = window.innerWidth;
+  H = cv.height = window.innerHeight;
+}
+resizeBg();
+window.addEventListener('resize', resizeBg);
+
+const STARS = Array.from({ length: 100 }, () => ({
+  x: Math.random(),
+  y: Math.random(),
+  r: Math.random() * 1.4 + 0.4,
+  a: Math.random(),
+  spd: Math.random() * 0.016 + 0.003
+}));
+
+(function tick() {
+  ctx2.clearRect(0, 0, W, H);
+  for (const s of STARS) {
+    s.a += s.spd;
+    if (s.a > 1 || s.a < 0) s.spd = -s.spd;
+    ctx2.beginPath();
+    ctx2.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+    ctx2.fillStyle = `rgba(255,220,100,${Math.abs(s.a).toFixed(2)})`;
+    ctx2.fill();
   }
-  setInterval(spawnPetal, 2200);
-  spawnPetal(); spawnPetal();
+  requestAnimationFrame(tick);
+})();
+
+/* ── Floating petals ── */
+const PETALS = ['🌸', '🌺', '🪷', '✨', '🌼'];
+function spawnPetal() {
+  const el = document.createElement('div');
+  el.className = 'petal';
+  el.textContent = PETALS[Math.floor(Math.random() * PETALS.length)];
+  el.style.left             = (Math.random() * 100) + 'vw';
+  el.style.fontSize         = (0.65 + Math.random() * 0.65) + 'rem';
+  el.style.animationDuration = (10 + Math.random() * 9) + 's';
+  el.style.animationDelay   = (Math.random() * 5) + 's';
+  document.body.appendChild(el);
+  el.addEventListener('animationend', () => el.remove());
+}
+setInterval(spawnPetal, 2400);
+spawnPetal(); spawnPetal(); spawnPetal();
 </script>
 </body>
 </html>
