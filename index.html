@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1a0505" />
+  <title>Jai Maa Durga — Virtual Diya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:    #FFD700;
+      --saffron: #FF8C00;
+      --flame1:  #FF4500;
+      --flame2:  #FFD700;
+      --clay1:   #C1440E;
+      --clay2:   #7A2C08;
+      --bg-deep: #0d0000;
+    }
+
+    html, body {
+      min-height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: radial-gradient(ellipse at 50% 30%, #2d0a0a 0%, #1a0505 55%, var(--bg-deep) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--gold);
+      transition: background 1.2s ease;
+      position: relative;
+    }
+
+    body.both-lit {
+      background: radial-gradient(ellipse at 50% 30%, #4a1010 0%, #2e0808 55%, #1a0303 100%);
+    }
+
+    /* ── CANVAS STARS ── */
+    #bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 36px 20px 12px;
+      width: 100%;
+    }
+
+    .om {
+      font-size: clamp(2.4rem, 8vw, 3.6rem);
+      color: var(--gold);
+      text-shadow: 0 0 18px var(--gold), 0 0 40px var(--saffron);
+      animation: halo 2.4s ease-in-out infinite alternate;
+      line-height: 1;
+      display: block;
+    }
+
+    @keyframes halo {
+      from { text-shadow: 0 0 18px var(--gold), 0 0 40px var(--saffron); }
+      to   { text-shadow: 0 0 30px var(--gold), 0 0 70px var(--saffron), 0 0 100px #FF4500; }
+    }
+
+    .title {
+      font-size: clamp(1.4rem, 5.5vw, 2.6rem);
+      letter-spacing: 3px;
+      margin: 10px 0 4px;
+      background: linear-gradient(135deg, #FFE57A, var(--gold), #FF8C00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      font-size: clamp(0.9rem, 3.5vw, 1.15rem);
+      color: var(--saffron);
+      opacity: 0.85;
+      letter-spacing: 1px;
+    }
+
+    .bar {
+      width: min(260px, 70vw);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 14px auto;
+      opacity: 0.6;
+    }
+
+    .decos {
+      font-size: 1.4rem;
+      letter-spacing: 8px;
+      opacity: 0.55;
+    }
+
+    /* ── DIYAS SECTION ── */
+    .diyas-row {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: clamp(24px, 6vw, 56px);
+      justify-content: center;
+      align-items: flex-end;
+      padding: 10px 20px 4px;
+      flex-wrap: wrap;
+    }
+
+    /* ── DIYA CARD ── */
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 22px 18px 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 215, 0, 0.18);
+      background: rgba(255,255,255,0.025);
+      backdrop-filter: blur(6px);
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color .5s, background .5s, box-shadow .5s;
+      min-width: 150px;
+    }
+
+    .card.lit {
+      border-color: rgba(255, 165, 0, 0.55);
+      background: rgba(255, 120, 0, 0.07);
+      box-shadow: 0 0 40px rgba(255, 120, 0, 0.25), 0 0 80px rgba(255, 80, 0, 0.1);
+    }
+
+    /* ── DIYA VISUAL ── */
+    .diya-scene {
+      position: relative;
+      width: 130px;
+      height: 160px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    /* Smoke */
+    .smoke {
+      position: absolute;
+      bottom: 106px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .smoke-dot {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(220,200,180,0.45);
+      opacity: 0;
+    }
+    .card.lit .smoke-dot:nth-child(1) { animation: smokeUp 2.4s ease-out 0s    infinite; }
+    .card.lit .smoke-dot:nth-child(2) { animation: smokeUp 2.4s ease-out 0.8s  infinite; }
+    .card.lit .smoke-dot:nth-child(3) { animation: smokeUp 2.4s ease-out 1.6s  infinite; }
+    @keyframes smokeUp {
+      0%   { opacity: 0;   transform: translateX(-50%) translateY(0)    scale(1);   }
+      15%  { opacity: 0.5; }
+      100% { opacity: 0;   transform: translateX(-50%) translateY(-38px) scale(3.5); }
+    }
+
+    /* Flame wrapper */
+    .flame-wrap {
+      position: absolute;
+      bottom: 96px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .flame {
+      position: relative;
+      width: 34px;
+      height: 60px;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .card.lit .flame { opacity: 1; }
+
+    .f-outer {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 52px;
+      background: linear-gradient(to top, #FF2200, #FF6600, #FFB800, #FFD700);
+      border-radius: 52% 48% 28% 28% / 72% 72% 28% 28%;
+      filter: blur(1.5px);
+    }
+    .f-mid {
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 40px;
+      background: linear-gradient(to top, #FF6600, #FFCC00, #FFFF88);
+      border-radius: 52% 48% 28% 28% / 72% 72% 28% 28%;
+      filter: blur(0.5px);
+    }
+    .f-core {
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 9px;
+      height: 22px;
+      background: linear-gradient(to top, #fff, #FFFACC);
+      border-radius: 52% 48% 28% 28% / 72% 72% 28% 28%;
+    }
+
+    /* Flame animations */
+    .card.lit .f-outer { animation: flk-o 1.6s ease-in-out infinite alternate; }
+    .card.lit .f-mid   { animation: flk-m 1.2s ease-in-out infinite alternate; }
+    .card.lit .f-core  { animation: flk-c 0.9s ease-in-out infinite alternate; }
+
+    @keyframes flk-o {
+      0%   { transform: translateX(-50%) scaleX(1)    scaleY(1)    rotate(-2deg); }
+      33%  { transform: translateX(-50%) scaleX(0.88) scaleY(1.07) rotate(1.5deg); }
+      66%  { transform: translateX(-50%) scaleX(1.12) scaleY(0.93) rotate(-1deg); }
+      100% { transform: translateX(-50%) scaleX(0.95) scaleY(1.05) rotate(2deg); }
+    }
+    @keyframes flk-m {
+      0%   { transform: translateX(-50%) scaleX(1)    scaleY(1)    rotate(0deg); }
+      50%  { transform: translateX(-50%) scaleX(0.82) scaleY(1.12) rotate(2deg); }
+      100% { transform: translateX(-50%) scaleX(1.18) scaleY(0.9)  rotate(-1.5deg); }
+    }
+    @keyframes flk-c {
+      0%   { transform: translateX(-50%) scaleY(1)   scaleX(1);   opacity: 1; }
+      50%  { transform: translateX(-50%) scaleY(0.88) scaleX(1.2); opacity: 0.82; }
+      100% { transform: translateX(-50%) scaleY(1.12) scaleX(0.8); opacity: 1; }
+    }
+
+    /* Glow under flame */
+    .f-glow {
+      position: absolute;
+      bottom: 89px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(255,150,0,0.7), transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s;
+    }
+    .card.lit .f-glow {
+      opacity: 1;
+      animation: glow-p 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes glow-p {
+      from { transform: translateX(-50%) scale(1);   opacity: 0.7; }
+      to   { transform: translateX(-50%) scale(1.35); opacity: 1; }
+    }
+
+    /* Diya SVG */
+    .diya-svg {
+      width: 120px;
+      height: auto;
+      filter: drop-shadow(0 5px 8px rgba(0,0,0,0.6));
+      transition: filter .5s;
+    }
+    .card.lit .diya-svg {
+      filter: drop-shadow(0 0 12px rgba(255,140,0,0.45)) drop-shadow(0 5px 8px rgba(0,0,0,0.6));
+    }
+
+    /* ── LABELS & CONTROLS ── */
+    .lbl {
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      color: var(--saffron);
+      text-transform: uppercase;
+    }
+
+    .status {
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      color: rgba(255,165,0,0.45);
+      text-transform: uppercase;
+      transition: color .5s;
+    }
+    .card.lit .status { color: var(--gold); }
+
+    .btn {
+      padding: 9px 22px;
+      border: 1.5px solid var(--gold);
+      background: transparent;
+      color: var(--gold);
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.68rem;
+      letter-spacing: 1px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background .3s, border-color .3s, color .3s, transform .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active { transform: scale(0.95); }
+    .btn:hover  { background: rgba(255,215,0,0.12); }
+
+    .card.lit .btn {
+      border-color: var(--saffron);
+      color: var(--saffron);
+      background: rgba(255,140,0,0.1);
+    }
+
+    /* ── BOTH BUTTON ── */
+    .both-row {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      padding: 8px 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .btn-both {
+      padding: 13px 34px;
+      background: linear-gradient(135deg, #8B0000, #B22222);
+      color: var(--gold);
+      border: 1.5px solid var(--gold);
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 0 18px rgba(180,30,30,0.4);
+      transition: transform .2s, box-shadow .3s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-both:active { transform: scale(0.95); }
+    .btn-both:hover  { box-shadow: 0 0 30px rgba(220,30,30,0.55); }
+
+    /* ── MANTRA ── */
+    .mantra-box {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 14px 24px 0;
+      max-width: 380px;
+      width: 100%;
+    }
+    .mantra-text {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      color: rgba(255,165,0,0.65);
+      font-size: clamp(0.78rem, 3.2vw, 0.95rem);
+      line-height: 2;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 20px 16px 32px;
+      color: rgba(255,165,0,0.35);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+    }
+
+    /* ── TAP RIPPLE ── */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,215,0,0.3);
+      transform: scale(0);
+      animation: ripple-anim 0.55s linear;
+      pointer-events: none;
+    }
+    @keyframes ripple-anim {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    /* ── PETAL PARTICLES ── */
+    .petal {
+      position: fixed;
+      font-size: 1rem;
+      pointer-events: none;
+      animation: petal-fall linear infinite;
+      z-index: 1;
+      opacity: 0;
+    }
+    @keyframes petal-fall {
+      0%   { transform: translateY(-5vh) rotate(0deg);   opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Starfield -->
+<canvas id="bg"></canvas>
+
+<!-- Header -->
+<header class="header">
+  <span class="om">ॐ</span>
+  <h1 class="title">Jai Maa Durga</h1>
+  <p class="subtitle">जय माँ दुर्गा — नवरात्रि आरती</p>
+  <div class="bar"></div>
+  <div class="decos">🪷 🔱 🪷</div>
+</header>
+
+<!-- Diyas -->
+<section class="diyas-row" id="diyasRow">
+
+  <!-- Diya 1 -->
+  <div class="card" id="d1" role="button" aria-label="Diya 1 toggle" tabindex="0">
+    <div class="diya-scene">
+      <div class="smoke">
+        <div class="smoke-dot"></div>
+        <div class="smoke-dot"></div>
+        <div class="smoke-dot"></div>
+      </div>
+      <div class="flame-wrap">
+        <div class="flame">
+          <div class="f-outer"></div>
+          <div class="f-mid"></div>
+          <div class="f-core"></div>
+        </div>
+      </div>
+      <div class="f-glow"></div>
+      <svg class="diya-svg" viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#D4500F"/>
+            <stop offset="55%"  stop-color="#A03A0A"/>
+            <stop offset="100%" stop-color="#6E2807"/>
+          </linearGradient>
+          <radialGradient id="oil1" cx="40%" cy="50%" r="55%">
+            <stop offset="0%"   stop-color="#2a0e00"/>
+            <stop offset="100%" stop-color="#0d0400"/>
+          </radialGradient>
+          <filter id="dshadow">
+            <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#00000088"/>
+          </filter>
+        </defs>
+        <!-- body -->
+        <path d="M18 44 Q22 62 60 66 Q98 62 102 44 Q93 30 60 27 Q27 30 18 44Z"
+              fill="url(#cg1)" filter="url(#dshadow)"/>
+        <!-- spout -->
+        <path d="M94 40 Q110 36 112 30 Q107 27 98 33 Q96 36 94 40Z"
+              fill="url(#cg1)"/>
+        <!-- oil pool -->
+        <ellipse cx="58" cy="44" rx="36" ry="10" fill="url(#oil1)" opacity="0.88"/>
+        <!-- rim highlight -->
+        <ellipse cx="58" cy="43" rx="36" ry="7" fill="none" stroke="rgba(255,140,60,0.35)" stroke-width="1.2"/>
+        <!-- inner oil sheen -->
+        <ellipse cx="46" cy="41" rx="11" ry="4" fill="rgba(255,120,0,0.12)"/>
+        <!-- wick base -->
+        <ellipse cx="100" cy="28" rx="3.5" ry="2" fill="#5c3400"/>
+        <!-- wick -->
+        <rect x="99" y="16" width="3" height="13" rx="1.5" fill="#3d2200"/>
+      </svg>
+    </div>
+    <div class="lbl">Diya One</div>
+    <div class="status" id="st1">Unlit</div>
+    <button class="btn" id="btn1" onclick="toggle(1); event.stopPropagation()">Light Up</button>
+  </div>
+
+  <!-- Diya 2 -->
+  <div class="card" id="d2" role="button" aria-label="Diya 2 toggle" tabindex="0">
+    <div class="diya-scene">
+      <div class="smoke">
+        <div class="smoke-dot"></div>
+        <div class="smoke-dot"></div>
+        <div class="smoke-dot"></div>
+      </div>
+      <div class="flame-wrap">
+        <div class="flame">
+          <div class="f-outer"></div>
+          <div class="f-mid"></div>
+          <div class="f-core"></div>
+        </div>
+      </div>
+      <div class="f-glow"></div>
+      <svg class="diya-svg" viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#D4500F"/>
+            <stop offset="55%"  stop-color="#A03A0A"/>
+            <stop offset="100%" stop-color="#6E2807"/>
+          </linearGradient>
+          <radialGradient id="oil2" cx="40%" cy="50%" r="55%">
+            <stop offset="0%"   stop-color="#2a0e00"/>
+            <stop offset="100%" stop-color="#0d0400"/>
+          </radialGradient>
+        </defs>
+        <path d="M18 44 Q22 62 60 66 Q98 62 102 44 Q93 30 60 27 Q27 30 18 44Z"
+              fill="url(#cg2)" filter="url(#dshadow)"/>
+        <path d="M94 40 Q110 36 112 30 Q107 27 98 33 Q96 36 94 40Z"
+              fill="url(#cg2)"/>
+        <ellipse cx="58" cy="44" rx="36" ry="10" fill="url(#oil2)" opacity="0.88"/>
+        <ellipse cx="58" cy="43" rx="36" ry="7" fill="none" stroke="rgba(255,140,60,0.35)" stroke-width="1.2"/>
+        <ellipse cx="46" cy="41" rx="11" ry="4" fill="rgba(255,120,0,0.12)"/>
+        <ellipse cx="100" cy="28" rx="3.5" ry="2" fill="#5c3400"/>
+        <rect x="99" y="16" width="3" height="13" rx="1.5" fill="#3d2200"/>
+      </svg>
+    </div>
+    <div class="lbl">Diya Two</div>
+    <div class="status" id="st2">Unlit</div>
+    <button class="btn" id="btn2" onclick="toggle(2); event.stopPropagation()">Light Up</button>
+  </div>
+
+</section>
+
+<!-- Both / All-off buttons -->
+<div class="both-row" style="margin-top:22px">
+  <button class="btn-both" id="btnBoth" onclick="lightBoth()">🪔 Light Both Diyas</button>
+  <button class="btn-both" id="btnOff" style="background:linear-gradient(135deg,#1a0a00,#2e1200);display:none" onclick="extAll()">✦ Extinguish All</button>
+</div>
+
+<!-- Mantra -->
+<div class="mantra-box">
+  <div class="bar" style="margin: 18px auto 14px"></div>
+  <p class="mantra-text">
+    या देवी सर्वभूतेषु शक्तिरूपेण संस्थिता।<br/>
+    नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥
+  </p>
+  <div class="bar" style="margin: 14px auto 0"></div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div style="letter-spacing:10px;font-size:1rem;opacity:.4">🌸 🌸 🌸</div>
+  <p style="margin-top:8px">Jai Maa Durga &nbsp;•&nbsp; Har Har Mahadev</p>
+</footer>
+
+<script>
+  /* ─── State ─── */
+  const state = [false, false];
+
+  /* ─── Toggle ─── */
+  function toggle(n) {
+    state[n - 1] = !state[n - 1];
+    applyState(n);
+    updateBothBtn();
+    if (state[n - 1]) igniteSound();
+    if (navigator.vibrate) navigator.vibrate(state[n - 1] ? 55 : 30);
+  }
+
+  function applyState(n) {
+    const card  = document.getElementById('d' + n);
+    const st    = document.getElementById('st' + n);
+    const btn   = document.getElementById('btn' + n);
+    const on    = state[n - 1];
+    card.classList.toggle('lit', on);
+    st.textContent  = on ? 'Burning ✦' : 'Unlit';
+    btn.textContent = on ? 'Extinguish' : 'Light Up';
+  }
+
+  function lightBoth() {
+    [1, 2].forEach(n => { state[n - 1] = true; applyState(n); });
+    igniteSound();
+    updateBothBtn();
+    if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+  }
+
+  function extAll() {
+    [1, 2].forEach(n => { state[n - 1] = false; applyState(n); });
+    updateBothBtn();
+    if (navigator.vibrate) navigator.vibrate(30);
+  }
+
+  function updateBothBtn() {
+    const allLit = state[0] && state[1];
+    const noneLit = !state[0] && !state[1];
+    document.getElementById('btnBoth').style.display = allLit  ? 'none'  : 'inline-block';
+    document.getElementById('btnOff').style.display  = noneLit ? 'none'  : 'inline-block';
+    document.body.classList.toggle('both-lit', allLit);
+  }
+
+  /* ─── Card click (whole card acts as button) ─── */
+  document.getElementById('d1').addEventListener('click', e => { rippleAt(e, document.getElementById('d1')); toggle(1); });
+  document.getElementById('d2').addEventListener('click', e => { rippleAt(e, document.getElementById('d2')); toggle(2); });
+  document.getElementById('d1').addEventListener('keydown', e => e.key === 'Enter' && toggle(1));
+  document.getElementById('d2').addEventListener('keydown', e => e.key === 'Enter' && toggle(2));
+
+  /* ─── Ripple ─── */
+  function rippleAt(e, el) {
+    const rect = el.getBoundingClientRect();
+    const r = document.createElement('span');
+    r.className = 'ripple';
+    r.style.cssText = `width:60px;height:60px;left:${(e.clientX||rect.left+rect.width/2)-rect.left-30}px;top:${(e.clientY||rect.top+rect.height/2)-rect.top-30}px`;
+    el.style.position = 'relative';
+    el.style.overflow = 'hidden';
+    el.appendChild(r);
+    r.addEventListener('animationend', () => r.remove());
+  }
+
+  /* ─── Ignite sound (Web Audio) ─── */
+  let actx;
+  function igniteSound() {
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      const sr  = actx.sampleRate;
+      const len = sr * 0.25;
+      const buf = actx.createBuffer(1, len, sr);
+      const d   = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (sr * 0.04));
+      const src = actx.createBufferSource();
+      src.buffer = buf;
+      const gain = actx.createGain();
+      gain.gain.setValueAtTime(0.25, actx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.25);
+      const filt = actx.createBiquadFilter();
+      filt.type = 'bandpass'; filt.frequency.value = 900; filt.Q.value = 0.6;
+      src.connect(filt); filt.connect(gain); gain.connect(actx.destination);
+      src.start();
+    } catch (_) {}
+  }
+
+  /* ─── Starfield canvas ─── */
+  const cv  = document.getElementById('bg');
+  const ctx = cv.getContext('2d');
+
+  function resize() { cv.width = innerWidth; cv.height = innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const stars = Array.from({ length: 90 }, () => ({
+    x: Math.random() * innerWidth,
+    y: Math.random() * innerHeight,
+    r: Math.random() * 1.4 + 0.4,
+    a: Math.random(),
+    spd: Math.random() * 0.018 + 0.004
+  }));
+
+  (function tick() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    stars.forEach(s => {
+      s.a += s.spd;
+      if (s.a > 1 || s.a < 0) s.spd = -s.spd;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,220,100,${Math.abs(s.a).toFixed(2)})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(tick);
+  })();
+
+  /* ─── Floating petals ─── */
+  const petals = ['🌸', '🌺', '🪷', '✨'];
+  function spawnPetal() {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petals[Math.floor(Math.random() * petals.length)];
+    p.style.left     = Math.random() * 100 + 'vw';
+    p.style.fontSize = (0.7 + Math.random() * 0.6) + 'rem';
+    p.style.animationDuration  = (9 + Math.random() * 8) + 's';
+    p.style.animationDelay     = (Math.random() * 6) + 's';
+    document.body.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+  }
+  setInterval(spawnPetal, 2200);
+  spawnPetal(); spawnPetal();
+</script>
+</body>
+</html>
