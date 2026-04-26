@@ -397,6 +397,133 @@
   }
   footer .flowers{font-size:1rem;letter-spacing:8px;opacity:.4;margin-bottom:8px}
 
+  /* ── NAMAVALI TRIGGER BUTTON ── */
+  .namavali-fab{
+    position:fixed;left:0;top:50%;transform:translateY(-50%);
+    z-index:200;
+    background:linear-gradient(180deg,#8B0000,#4a0008);
+    color:var(--gold);
+    border:1.5px solid rgba(255,215,0,.5);
+    border-left:none;
+    border-radius:0 14px 14px 0;
+    padding:14px 10px;
+    font-family:'Noto Sans Telugu','Noto Sans Devanagari',sans-serif;
+    font-size:.72rem;
+    writing-mode:vertical-rl;
+    text-orientation:mixed;
+    cursor:pointer;
+    box-shadow:3px 0 18px rgba(180,20,20,.4);
+    transition:background .3s,box-shadow .3s;
+    line-height:1.4;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .namavali-fab:hover,.namavali-fab:active{
+    background:linear-gradient(180deg,#a00000,#700010);
+    box-shadow:3px 0 28px rgba(200,30,30,.55);
+  }
+
+  /* ── NAMAVALI DRAWER ── */
+  .namavali-overlay{
+    position:fixed;inset:0;z-index:190;
+    background:rgba(0,0,0,.65);
+    opacity:0;pointer-events:none;
+    transition:opacity .35s;
+    backdrop-filter:blur(2px);
+  }
+  .namavali-overlay.open{opacity:1;pointer-events:all}
+
+  .namavali-drawer{
+    position:fixed;left:0;top:0;bottom:0;z-index:195;
+    width:min(370px,94vw);
+    background:linear-gradient(160deg,#1c0505 0%,#120202 60%,#0a0000 100%);
+    border-right:1.5px solid rgba(255,215,0,.25);
+    box-shadow:4px 0 40px rgba(0,0,0,.8);
+    display:flex;flex-direction:column;
+    transform:translateX(-100%);
+    transition:transform .38s cubic-bezier(.4,0,.2,1);
+    overflow:hidden;
+  }
+  .namavali-drawer.open{transform:translateX(0)}
+
+  .drawer-header{
+    flex-shrink:0;
+    background:linear-gradient(135deg,#6b0000,#3a0005);
+    border-bottom:1px solid rgba(255,215,0,.3);
+    padding:18px 16px 14px;
+    display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+  }
+  .drawer-title{
+    font-family:'Noto Sans Telugu','Noto Sans Devanagari',sans-serif;
+    font-size:1rem;font-weight:700;
+    color:var(--gold);letter-spacing:1px;line-height:1.3;
+  }
+  .drawer-subtitle{
+    font-family:'Noto Sans Telugu',sans-serif;
+    font-size:.7rem;color:rgba(255,165,0,.65);
+    margin-top:3px;letter-spacing:.5px;
+  }
+  .drawer-close{
+    background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.35);
+    color:var(--gold);font-size:1.1rem;
+    min-width:34px;height:34px;border-radius:50%;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;transition:background .2s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .drawer-close:hover{background:rgba(255,215,0,.22)}
+
+  .drawer-scroll{
+    flex:1;overflow-y:auto;padding:8px 12px 24px;
+    scrollbar-width:thin;scrollbar-color:rgba(255,215,0,.2) transparent;
+  }
+  .drawer-scroll::-webkit-scrollbar{width:4px}
+  .drawer-scroll::-webkit-scrollbar-track{background:transparent}
+  .drawer-scroll::-webkit-scrollbar-thumb{background:rgba(255,215,0,.22);border-radius:4px}
+
+  .namavali-intro{
+    font-family:'Noto Sans Telugu',sans-serif;
+    font-size:.72rem;color:rgba(255,165,0,.55);
+    text-align:center;padding:8px 4px 12px;
+    border-bottom:1px solid rgba(255,215,0,.12);
+    margin-bottom:8px;line-height:1.7;
+  }
+
+  .nama-item{
+    display:flex;gap:10px;align-items:flex-start;
+    padding:9px 6px;
+    border-bottom:1px solid rgba(255,215,0,.07);
+    border-radius:8px;margin-bottom:1px;
+    transition:background .2s;
+  }
+  .nama-item:hover,.nama-item:active{background:rgba(255,215,0,.05)}
+  .nama-num{
+    flex-shrink:0;width:26px;height:26px;border-radius:50%;
+    background:rgba(180,20,0,.5);border:1px solid rgba(255,215,0,.3);
+    display:flex;align-items:center;justify-content:center;
+    font-size:.6rem;color:var(--gold);font-weight:700;margin-top:2px;
+  }
+  .nama-content{flex:1;min-width:0}
+  .nama-sanskrit{
+    font-family:'Noto Sans Devanagari',sans-serif;
+    font-size:.88rem;color:var(--gold);font-weight:600;line-height:1.4;
+  }
+  .nama-telugu{
+    font-family:'Noto Sans Telugu',sans-serif;
+    font-size:.8rem;color:var(--saffron);margin-top:1px;line-height:1.4;
+  }
+  .nama-meaning{
+    font-family:'Noto Sans Telugu',sans-serif;
+    font-size:.71rem;color:rgba(255,180,80,.68);
+    margin-top:3px;line-height:1.55;font-style:italic;
+  }
+
+  .drawer-footer{
+    flex-shrink:0;text-align:center;padding:11px;
+    border-top:1px solid rgba(255,215,0,.15);
+    font-family:'Noto Sans Telugu',sans-serif;
+    font-size:.68rem;color:rgba(255,165,0,.4);
+  }
+
   /* ── RIPPLE ── */
   .rip{
     position:absolute;border-radius:50%;
@@ -973,6 +1100,95 @@ function spawnPetal() {
 }
 setInterval(spawnPetal, 2400);
 spawnPetal(); spawnPetal(); spawnPetal();
+
+/* ── Namavali drawer ── */
+const NAMAS = [
+  { n:'దుర్గా',              s:'दुर्गा',                      m:'అన్ని కష్టాలను, శత్రువులను తొలగించే శక్తి స్వరూపిణి' },
+  { n:'దుర్గార్తిశమని',      s:'दुर्गार्तिशमनी',               m:'కష్ట దుఃఖ బాధలను శాంతింపజేసే తల్లి' },
+  { n:'దుర్గాపద్వినివారిణి', s:'दुर्गापद्विनिवारिणी',          m:'కష్టమైన ఆపదలను నివారించేది' },
+  { n:'దుర్గమచ్ఛేదిని',      s:'दुर्गमच्छेदिनी',               m:'దుర్గమ శత్రువులను ఖండించేది' },
+  { n:'దుర్గసాధిని',          s:'दुर्गसाधिनी',                  m:'కష్టసాధ్యమైన కార్యాలను సాధించేది' },
+  { n:'దుర్గనాశిని',          s:'दुर्गनाशिनी',                  m:'సమస్త కష్టాలను నాశనం చేసేది' },
+  { n:'దుర్గతోద్ధారిణి',      s:'दुर्गतोद्धारिणी',              m:'దుర్గతి నుండి ఉద్ధరించే పరమాత్మ' },
+  { n:'దుర్గేతారిణి',         s:'दुर्गेतारिणी',                 m:'కష్టమైన భవసాగరమును దాటించేది' },
+  { n:'దుర్గమాబోధిని',        s:'दुर्गमाबोधिनी',                m:'అగమ్యమైన జ్ఞానమును ప్రబోధించేది' },
+  { n:'దుర్గమజ్ఞానదా',        s:'दुर्गमज्ञानदा',                m:'దుర్లభమైన దివ్య జ్ఞానమును ప్రసాదించేది' },
+  { n:'దుర్గదైత్యలోకదవానలా', s:'दुर्गदैत्यलोकदवानला',         m:'రాక్షస లోకమును దహించే అగ్నిస్వరూపిణి' },
+  { n:'దుర్గమా',              s:'दुर्गमा',                      m:'అందుకోలేని, అత్యంత దుర్గమ్యమైన పరమశక్తి' },
+  { n:'దుర్గమాలోకా',          s:'दुर्गमालोका',                  m:'దర్శనమే అతి కష్టమైన దేవి' },
+  { n:'దుర్గమాత్మస్వరూపిణి', s:'दुर्गमात्मस्वरूपिणी',          m:'దుర్జ్ఞేయమైన ఆత్మ స్వరూపముగా నిలిచేది' },
+  { n:'దుర్గమార్గప్రదా',      s:'दुर्गमार्गप्रदा',              m:'కష్టమైన మోక్షమార్గమును చూపించేది' },
+  { n:'దుర్గమవిద్యా',         s:'दुर्गमविद्या',                 m:'అందుకోలేని దివ్య విద్యా స్వరూపిణి' },
+  { n:'దుర్గమాశ్రితా',        s:'दुर्गमाश्रिता',                m:'కష్టకాలంలో ఆశ్రయమిచ్చే అమ్మ' },
+  { n:'దుర్గమజ్ఞానసంస్థానా', s:'दुर्गमज्ञानसंस्थाना',          m:'దుర్గమ జ్ఞానమందు నిత్యమూ నిలిచేది' },
+  { n:'దుర్గమధ్యానభాసిని',    s:'दुर्गमध्यानभासिनी',            m:'ధ్యానమందు ప్రకాశించే జ్యోతిస్వరూపిణి' },
+  { n:'దుర్గమోహా',            s:'दुर्गमोहा',                    m:'మహా మోహమును తొలగించేది' },
+  { n:'దుర్గమగా',             s:'दुर्गमगा',                     m:'దుర్గమ స్థలాలకు చేరే, సర్వత్రా వ్యాపించే శక్తి' },
+  { n:'దుర్గమార్థస్వరూపిణి', s:'दुर्गमार्थस्वरूपिणी',          m:'అత్యంత గహనమైన అర్థ స్వరూపముగా నున్నది' },
+  { n:'దుర్గమాసురసంహంత్రి',   s:'दुर्गमासुरसंहन्त्री',          m:'మహారాక్షసులను సంహరించిన మహాశక్తి' },
+  { n:'దుర్గమాయుధధారిణి',     s:'दुर्गमायुधधारिणी',             m:'అనేక శక్తివంతమైన దివ్య ఆయుధాలు ధరించేది' },
+  { n:'దుర్గమాంగి',           s:'दुर्गमाङ्गी',                  m:'అందమైన, దివ్యమైన అంగాలు కలిగిన అమ్మ' },
+  { n:'దుర్గమాతా',            s:'दुर्गमाता',                    m:'సర్వ జీవులకూ దుర్గమ్యమైన మహా తల్లి' },
+  { n:'దుర్గమ్యా',            s:'दुर्गम्या',                    m:'సాధారణ మనసుకు అందని పరబ్రహ్మస్వరూపిణి' },
+  { n:'దుర్గమేశ్వరి',         s:'दुर्गमेश्वरी',                 m:'దుర్గమ్యమైన సమస్త లోకాలకు ఈశ్వరి' },
+  { n:'దుర్గభీమా',            s:'दुर्गभीमा',                    m:'కష్టాలలో భీకర రూపంతో శత్రువులను నాశనం చేసేది' },
+  { n:'దుర్గభామా',            s:'दुर्गभामा',                    m:'అద్భుత సౌందర్యముతో ప్రకాశించే సుందరి' },
+  { n:'దుర్గభా',              s:'दुर्गभा',                      m:'చీకటిలో వెలుతురు వలె ప్రకాశించేది' },
+  { n:'దుర్గదారిణి',          s:'दुर्गदारिणी',                  m:'దుష్టులను, రాక్షసులను విదారించే పరాక్రమి' },
+];
+
+function buildDrawer() {
+  let html = `
+  <button class="namavali-fab" id="namaFab" onclick="openNama()" aria-label="నామావళి తెరువు">
+    📿 నామావళి
+  </button>
+  <div class="namavali-overlay" id="namaOverlay" onclick="closeNama()"></div>
+  <aside class="namavali-drawer" id="namaDrawer" role="dialog" aria-modal="true" aria-label="దుర్గా ద్వాత్రింశన్నామావళి">
+    <div class="drawer-header">
+      <div>
+        <div class="drawer-title">📿 శ్రీ దుర్గా ద్వాత్రింశన్నామావళి</div>
+        <div class="drawer-subtitle">32 దివ్య నామాలు — అర్థాలతో సహా</div>
+      </div>
+      <button class="drawer-close" onclick="closeNama()" aria-label="మూయు">✕</button>
+    </div>
+    <div class="drawer-scroll">
+      <div class="namavali-intro">
+        ఈ 32 నామాలు పఠించిన వారికి<br/>దుర్గా మాత సర్వ శుభాలు ప్రసాదిస్తుంది 🙏
+      </div>`;
+
+  NAMAS.forEach((nama, i) => {
+    html += `
+      <div class="nama-item">
+        <div class="nama-num">${i + 1}</div>
+        <div class="nama-content">
+          <div class="nama-sanskrit">${nama.s}</div>
+          <div class="nama-telugu">${nama.n}</div>
+          <div class="nama-meaning">${nama.m}</div>
+        </div>
+      </div>`;
+  });
+
+  html += `
+    </div>
+    <div class="drawer-footer">జయ మాతా దుర్గా 🙏 &nbsp;•&nbsp; శుభ నవరాత్రి</div>
+  </aside>`;
+
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+function openNama() {
+  document.getElementById('namaDrawer').classList.add('open');
+  document.getElementById('namaOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeNama() {
+  document.getElementById('namaDrawer').classList.remove('open');
+  document.getElementById('namaOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNama(); });
+
+buildDrawer();
 </script>
 </body>
 </html>
